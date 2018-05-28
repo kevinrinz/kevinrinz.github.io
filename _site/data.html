@@ -33,10 +33,6 @@
 
         <p></p>
 
-        
-
-        
-        
         <ul class="header">
           <li><a href="cv.pdf" target="_blank">CV</a></li>
           <li><a href="research.html">Research</a></li>
@@ -52,28 +48,28 @@
 
 <h3 id="code-for-using-public-data">Code for using public data</h3>
 
-<p><strong>JOLTS:</strong> Create a single Stata dataset that contains the full time series of all JOLTS variables available through FRED, named in a way that is comprehensible to humans. (do, readme)</p>
+<p><strong>JOLTS:</strong> Create a single Stata dataset that contains the full time series of all JOLTS variables available through FRED, named in a way that is comprehensible to humans. (<a href="./data/jolts.do" target="_blank">do</a>, <a href="./data/jolts_readme.txt" target="_blank">readme</a>)</p>
 
-<p><strong>Longitudinally linked basic monthly CPS:</strong> Panelize the Current Population Survey based on the methods described in Nekarda (2009), retaining key demographic and labor market variables. (do, readme, example dta, Nekarda 2009)</p>
+<p><strong>Longitudinally linked basic monthly CPS:</strong> Panelize the Current Population Survey based on the methods described in Nekarda (2009), retaining key demographic and labor market variables. (<a href="./data/linked_cps.do" target="_blank">do</a>, <a href="./data/linked_cps_readme.txt" target="_blank">readme</a>, <a href="./data/linked_cps.zip" target="_blank">example dta</a>, <a href="https://chrisnekarda.com/2009/05/a-longitudinal-analysis-of-the-current-population-survey/" target="_blank">Nekarda 2009</a>)</p>
 
 <p><strong>Common county-level datasets:</strong> Assemble panels of measures commonly used as covariates or outcomes of interest in county-level analysis.</p>
 <ul>
   <li>Employment, unemployment, and participation from BLS’s Local Area Unemployment Statistics (LAUS) program
     <ul>
       <li>Average annual measures of employment, unemployment, and labor force participation, available since 1990</li>
-      <li>do, dta</li>
+      <li><a href="./data/laus.do" target="_blank">do</a>, <a href="./data/laus.zip" target="_blank">dta</a></li>
     </ul>
   </li>
   <li>Income and poverty data from Census’s Small Area Income and Poverty Estimates (SAIPE) program
     <ul>
       <li>Annual data on poverty rates for all individuals, children under 18, and children 5-17 in families, as well as median household income</li>
-      <li>do, dta</li>
+      <li><a href="./data/saipe.do" target="_blank">do</a>, <a href="./data/saipe.zip" target="_blank">dta</a></li>
     </ul>
   </li>
   <li>Population data from the Surveillance, Epidemiology, and End Results (SEER) program
     <ul>
       <li>Annual data on the population of each county for groups defined by age, race, ethnicity, and sex, available since 1969</li>
-      <li>do, example dta - all counties, 1990-2015</li>
+      <li><a href="seer.do" target="_blank">do</a>, <a href="./data/seer.zipx" target="_blank">example dta</a> - all counties, 1990-2015</li>
     </ul>
   </li>
 </ul>

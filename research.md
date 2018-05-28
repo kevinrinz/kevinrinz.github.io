@@ -27,12 +27,13 @@ layout: default
   - Coverage: [The Atlantic](https://www.theatlantic.com/education/archive/2017/02/the-catholic-schools-saved-by-vouchers/516888/){:target="_blank"}, [Business Insider](http://www.businessinsider.com/catholic-schools-voucher-programs-study-2017-2/){:target="_blank"}, [Milwaukee Journal-Sentinel](https://www.jsonline.com/story/news/education/2017/02/14/study-vouchers-kept-milwaukee-catholic-parishes-open-but-cost-religious-activity/97855218/){:target="_blank"}, [POLITICO](https://www.politico.com/tipsheets/morning-education/2017/02/school-vouchers-diminish-churches-religious-activities-218734){:target="_blank"}, [USA Today](https://www.usatoday.com/story/news/2017/02/14/study-vouchers-kept-catholic-parishes-open-but-cost-religious-activity/97915968/){:target="_blank"}, [America](https://www.americamagazine.org/politics-society/2017/03/01/what-trumps-call-vouchers-could-mean-catholic-schools){:target="_blank"}
 - **"Undone by the Market? The Effects of School Vouchers on Educational Inputs"**
   - _By altering the market for private schooling, large-scale school voucher programs may have effects on the educational experience of private school students beyond the effects of small-scale programs. Using eight large, state-level, voucher-style programs adopted between the late 1990s and mid-2000s and a unique dataset on school expenditures and teacher compensation, I estimate the effects of vouchers on educational inputs experienced by students in private school. Large-scale, voucher-style programs alter the inputs students experience in ways that tend to worsen the experience of black students while improving the experience of white students. These effects are driven by changes in inputs deployed at newly established schools. Back-of-the-envelope calculations indicate that the market effects of vouchers are large enough to substantially reduce the benefits of moving from public to private school for black students, reversing more than 100 percent of the gains in student-teacher ratio, 87 percent of the gain in per-teacher compensation, and 51 percent of the gain in instructional hours. My estimates suggest that extrapolation from prior studies may be inappropriate when considering how larger programs affect students._
-  - Download
+  - [Download](./research/jmp.pdf){:target="_blank"}
 
 ### Work in Progress
-- TK
+- Labor market concentration, income inequality, and income mobility
+- Heterogeneous effects of trade shocks on migration (with Abigail Wozniak)
 
 ### Resting Papers
 - **"The Effects of Right to Work Laws on Wages: Evidence from the Taft-Hartley Act of 1947"**
   - _This paper uses the details of an historical setting in which the introduction of “right to work” laws was arguably exogenous – the period following the passage of the Taft-Hartley Act in 1947 – to produce credibly identified estimates of the effects of these laws on wages. The average effect of right to work laws on wages across all sectors of the economy is likely small and slightly negative. Some evidence indicates wage effects are more negative within the highly unionized sector._
-  - Download
+  - [Download](./research/rtw.pdf){:target="_blank"}
