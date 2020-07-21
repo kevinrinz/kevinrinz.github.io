@@ -4,6 +4,11 @@ layout: default
 
 ## Data
 
+### Data from papers
+
+**Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings**
+- Data on mean physician earnings in 2017 for the 125 largest commuting zones (1990 vintage), for all physicians and by Medicare specialty. ([readme](./data/physician_earnings_data_readme.pdf){:target="_blank"}, [dta](./data/physician_earnings_data.dta){:target="_blank"}, [csv](./data/physician_earnings_data.csv){:target="_blank"}, [download all](./data/physician_earnings_data.zip){:target="_blank"})
+
 ### Code for using public data
 
 **JOLTS:** Create a single Stata dataset that contains the full time series of all JOLTS variables available through FRED, named in a way that is comprehensible to humans. ([do](./data/jolts.do){:target="_blank"}, [readme](./data/jolts_readme.txt){:target="_blank"})
