@@ -1,5 +1,6 @@
 ---
 layout: plain
+title: Jules and Kevin's Wedding
 ---
 
 ![Jules and Kevin's Wedding](flyer-landscape.png){:width=100%}
@@ -13,10 +14,10 @@ Saturday, January 23, 2021, 3:00 pm \\
 Tidal Basin, Washington DC \\
 with a streaming option
 
-<h2><font color=navy> Program </font></h2>
-To come
-
 <h2><font color=navy> Registry </font></h2>
+[Unified registry through Zola](https://www.zola.com/registry/julesandkevin2021){:target="_blank"}
+
+<h2><font color=navy> Program </font></h2>
 To come
 
 <center>
