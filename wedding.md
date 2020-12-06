@@ -17,6 +17,9 @@ with a streaming option
 <h2><font color=navy> Registry </font></h2>
 [Unified registry through Zola](https://www.zola.com/registry/julesandkevin2021){:target="_blank"}
 
+<h2><font color=navy> RSVP </font></h2>
+[Complete this form for each guest](https://forms.gle/6VUxccZpwa85tDyTA){:target="_blank"}
+
 <h2><font color=navy> Program </font></h2>
 To come
 
