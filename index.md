@@ -4,7 +4,7 @@ layout: default
 
 ## Home
 
-Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. Census Bureau.
+Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. Census Bureau. From 2021--2022, he served as a senior economist for labor with President Biden's Council of Economic Advisers. He previously served as a staff economist for labor with President Obama's Council of Economic Advisers.
 
 ### Updates
 
