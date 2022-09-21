@@ -24,4 +24,4 @@ layout: default
   - [do](./data/saipe.do){:target="_blank"}, [dta](./data/saipe.zip){:target="_blank"}
 - Population data from the Surveillance, Epidemiology, and End Results (SEER) program
   - Annual data on the population of each county for groups defined by age, race, ethnicity, and sex, available since 1969
-  - [do](seer.do){:target="_blank"}, [example dta](./data/seer.zipx){:target="_blank"} - all counties, 1990-2015
+  - [do](./data/seer.do){:target="_blank"}, [example dta](./data/seer.zipx){:target="_blank"} - all counties, 1990-2015
