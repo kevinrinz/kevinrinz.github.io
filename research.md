@@ -26,7 +26,9 @@ layout: default
   - Coverage: [VoxEU](https://voxeu.org/article/effects-private-school-subsidy-programmes-school-revenue-and-enrolment){:target="_blank"}, [Chalkbeat](https://www.chalkbeat.org/posts/us/2017/07/30/do-vouchers-actually-expand-school-choice-not-necessarily-it-depends-on-how-theyre-designed/){:target="_blank"}
 
 ### Working Papers
-- **"Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings"**
+- **"Re-examining Regional Income Convergence: A Distributional Approach"** (with John Voorheis)
+  - Download: [paper](convergence.pdf){:target="_blank"}, [non-technical summary](convergence_summary.pdf){:target="_blank"}, [state income distribution data](./data/state_income_data.zip){:target="_blank"}, [data readme](./data/state_income_data_readme.pdf){:target="_blank"}
+- **"Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings"** (with Joshua Gottlieb, Maria Polyakova, Hugh Shiplett, and Victoria Udalova)
 <!--  - _Is government guiding the invisible hand at the top of the labor market? We study this question among physicians, the most common occupation among the top one percent of income earners, and whose billings comprise one-fifth of healthcare spending. We use a novel linkage of population-wide tax records with the administrative registry of all physicians in the U.S. to study the characteristics of these high earnings, and  the influence of government payments in particular. We find a major role for government on the margin, with half of direct changes to government reimbursement rates flowing directly into physicians' incomes. These policies move physicians' relative and absolute incomes more than any reasonable changes to marginal tax rates. At the same time, the overall level of physician earnings can largely be explained by labor market fundamentals of long work and training hours. Competing occupations also pay well and provide a natural lower bound for physician earnings. We conclude that government plays a major role in determining the value of physicians' human capital, but it is unrealistic to use this power to reduce healthcare spending substantially._ -->
   - Download: [paper](physicians.pdf){:target="_blank"}, [non-technical summary](physicians_summary.pdf){:target="_blank"}, [physician earnings data](.data/physician_earnings_data.zip){:target="_blank"}
 - **"The Distributional Effects of Minimum Wages: Evidence from Linked Survey and Administrative Data"** (with John Voorheis)
@@ -42,6 +44,9 @@ layout: default
 
 ### Work in Progress
 - Heterogeneous effects of trade shocks on migration (with Abigail Wozniak)
+- Measuring local income inequality and mobility (with Illenin Kondo, John Voorheis, and Abigail Wozniak)
+- The rise of health care jobs (with Joshua Gottlieb, Neale Mahoney, and Victoria Udalova)
+- Intergenerational effects of minimum wages (with John Coglianese)
 
 ### Resting Papers
 - **"The Effects of Right to Work Laws on Wages: Evidence from the Taft-Hartley Act of 1947"**
