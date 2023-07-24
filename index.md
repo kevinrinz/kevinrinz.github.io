@@ -8,6 +8,8 @@ Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. C
 
 ### Updates
 
+2023-07-17: Posted an updated working paper, **"Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings"** - download [ungated version](physicians.pdf){:target="_blank"}, [NBER version](https://www.nber.org/papers/w31469.pdf){:target="_blank"}, [BFI research brief](https://bfi.uchicago.edu/wp-content/uploads/2023/07/Who-Values-Human-Capitalists-Human-Capital.pdf){:target="_blank"}
+
 2023-02-02: Posted a new paper, **"Re-examining Regional Income Convergence: A Distributional Approach"** - download [full paper](convergence.pdf){:target="_blank"}, [non-technical summary](convergence_summary.pdf){:target="_blank"}, [state income distribution data](./data/state_income_data.zip){:target="_blank"}, [data readme](./data/state_income_data_readme.pdf){:target="_blank"}
 
 2020-07-21: Posted a new paper, **"Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings"** - download [full paper](physicians.pdf){:target="_blank"}, [non-technical summary](physicians_summary.pdf){:target="_blank"}, [physician earnings data](./data/physician_earnings_data.zip){:target="_blank"}
