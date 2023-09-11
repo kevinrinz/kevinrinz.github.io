@@ -4,9 +4,11 @@ layout: default
 
 ## Home
 
-Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. Census Bureau. He is also currently a visiting scholar at the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. From 2021--2022, he served as a senior economist for labor with President Biden's Council of Economic Advisers. He previously served as a staff economist for labor with President Obama's Council of Economic Advisers.
+Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. Census Bureau. From 2021--2022, he served as a senior economist for labor with President Biden's Council of Economic Advisers, and from 2022--2023 he was a visiting scholar with the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. He previously served as a staff economist for labor with President Obama's Council of Economic Advisers.
 
 ### Updates
+
+2023-09-11: Launched [Briefing Book](https://www.briefingbook.info){:target="_blank"}, a newsletter about economic policy
 
 2023-07-17: Posted an updated working paper, **"Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings"** - download [ungated version](physicians.pdf){:target="_blank"}, [NBER version](https://www.nber.org/papers/w31469.pdf){:target="_blank"}, [BFI research brief](https://bfi.uchicago.edu/wp-content/uploads/2023/07/Who-Values-Human-Capitalists-Human-Capital.pdf){:target="_blank"}
 
