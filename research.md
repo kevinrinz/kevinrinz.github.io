@@ -26,6 +26,9 @@ layout: default
   - Coverage: [VoxEU](https://voxeu.org/article/effects-private-school-subsidy-programmes-school-revenue-and-enrolment){:target="_blank"}, [Chalkbeat](https://www.chalkbeat.org/posts/us/2017/07/30/do-vouchers-actually-expand-school-choice-not-necessarily-it-depends-on-how-theyre-designed/){:target="_blank"}
 
 ### Working Papers
+- **"A Shock by Any Other Name? Reconsidering the Impacts of Local Demand Shocks"** (with Sean Bassler and Abigail Wozniak)
+  - Over the last decade, research on labor market adjustment following local demand shocks has expanded to explore a wide variety of measured shocks. However, the worker adjustments observed in response to these shocks - such as migration, labor force participation, and wages - are not always consistent across studies. We create a harmonized set of annual commuting zone-level shocks following the major approaches in the literature to investigate these differences. As one might expect, shocks of different types exhibit different geographic and temporal patterns and are generally weakly correlated with each other. We find they also generate different employment and migration responses, with trade-related shocks showing little response on either margin while more general Bartik-style shocks are associated with economically meaningful changes in both employment and migration.
+  - Draft coming soon
 - **"Re-examining Regional Income Convergence: A Distributional Approach"** (with John Voorheis)
   - Download: [paper](convergence.pdf){:target="_blank"}, [non-technical summary](convergence_summary.pdf){:target="_blank"}, [state income distribution data](./data/state_income_data.zip){:target="_blank"}, [data readme](./data/state_income_data_readme.pdf){:target="_blank"}
 - **"Who Values Human Capitalists' Human Capital? Healthcare Spending and Physician Earnings"** (with Joshua Gottlieb, Maria Polyakova, Hugh Shiplett, and Victoria Udalova)
