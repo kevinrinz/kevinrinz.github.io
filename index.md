@@ -8,6 +8,8 @@ Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. C
 
 ### Updates
 
+2024-01-08: Posted a new paper, **"The Effect of Emergency Financial Assistance on Employment and Earnings"** - download [full paper](efa.pdf){:target="_blank"}
+
 2023-10-02: Launched [Income Distributions and Dynamics in America](https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america){:target="_blank"}, a data resource on income inequality and mobility, with partners at the Minneapolis Fed's Opportunity and Inclusive Growth Institute
 
 2023-09-11: Launched [Briefing Book](https://www.briefingbook.info){:target="_blank"}, a newsletter about economic policy
