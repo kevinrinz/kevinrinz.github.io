@@ -27,7 +27,7 @@ layout: default
 
 ### Working Papers
 - **"The Effect of Emergency Financial Assistance on Employment and Earnings"** (with Daniel Hungerman, David Phillips, and James Sullivan)
-  - Download: [paper](efa.pdf){:target="_blank"}
+  - Download: [paper](efa.pdf){:target="_blank"}, [non-technical summary](efa_summary.pdf){:target="_blank"}
 - **"A Shock by Any Other Name? Reconsidering the Impacts of Local Demand Shocks"** (with Sean Bassler and Abigail Wozniak)
   - Over the last decade, research on labor market adjustment following local demand shocks has expanded to explore a wide variety of measured shocks. However, the worker adjustments observed in response to these shocks - such as migration, labor force participation, and wages - are not always consistent across studies. We create a harmonized set of annual commuting zone-level shocks following the major approaches in the literature to investigate these differences. As one might expect, shocks of different types exhibit different geographic and temporal patterns and are generally weakly correlated with each other. We find they also generate different employment and migration responses, with trade-related shocks showing little response on either margin while more general Bartik-style shocks are associated with economically meaningful changes in both employment and migration.
   - Draft coming soon
