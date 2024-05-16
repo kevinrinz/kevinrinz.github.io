@@ -4,7 +4,7 @@ layout: default
 
 ## Home
 
-Kevin Rinz is a labor economist in the Center for Economic Studies at the U.S. Census Bureau. From 2021--2022, he served as a senior economist for labor with President Biden's Council of Economic Advisers, and from 2022--2023 he was a visiting scholar with the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. He previously served as a staff economist for labor with President Obama's Council of Economic Advisers.
+Kevin Rinz is a Senior Fellow and Research Advisor at the Washington Center for Equitable Growth. Prior to joining Equitable Growth, he held research roles as an economist at the U.S. Census Bureau and as a visiting scholar with the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. He also twice served in policy roles at the White House Council of Economic Advisers, first as a staff economist in 2013–2014 and then as a senior economist in 2021–2022. His research focuses on how policy can help people succeed in the labor market, and his work has appeared in journals including *The Review of Economics and Statistics*, *Journal of Human Resources*, *Journal of Labor Economics*, and *Journal of Public Economics*.
 
 ### Updates
 
