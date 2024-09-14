@@ -8,6 +8,11 @@ Kevin Rinz is a Senior Fellow and Research Advisor at the Washington Center for 
 
 ### Updates
 
+2024-08-26: Posted a new paper, **"Granular Income Inequality and Mobility using IDDA: Exploring Patterns across
+Race and Ethnicity"** - download [paper](idda.pdf){:target="_blank"}, [data](https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america/data-center){:target="_blank"}
+
+2024-04-22: Started a new position as Senior Fellow and Research Advisor at the Washington Center for Equitable Growth
+
 2024-01-08: Posted a new paper, **"The Effect of Emergency Financial Assistance on Employment and Earnings"** - download [full paper](efa.pdf){:target="_blank"}, [non-technical summary](efa_summary.pdf){:target="_blank"}
 
 2023-10-02: Launched [Income Distributions and Dynamics in America](https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america){:target="_blank"}, a data resource on income inequality and mobility, with partners at the Minneapolis Fed's Opportunity and Inclusive Growth Institute

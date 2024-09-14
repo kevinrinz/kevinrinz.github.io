@@ -5,9 +5,8 @@ layout: default
 ## Contact
 
 Kevin Rinz  
-Center for Economic Studies  
-U.S. Census Bureau  
-4600 Silver Hill Road  
-Washington, DC 20233  
-301-763-6735  
-kevin [dot] rinz [at] census [dot] gov
+Washington Center for Equitable Growth
+740 15th St NW
+8th Floor
+Washington, DC 20005
+krinz [at] equitablegrowth [dot] org
