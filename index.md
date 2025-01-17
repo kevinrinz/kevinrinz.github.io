@@ -4,7 +4,7 @@ layout: default
 
 ## Home
 
-Kevin Rinz is a Senior Fellow and Research Advisor at the Washington Center for Equitable Growth. Prior to joining Equitable Growth, he held research roles as an economist at the U.S. Census Bureau and as a visiting scholar with the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. He also twice served in policy roles at the White House Council of Economic Advisers, first as a staff economist in 2013–2014 and then as a senior economist in 2021–2022. His research focuses on how policy can help people succeed in the labor market, and his work has appeared in journals including *The Review of Economics and Statistics*, *Journal of Human Resources*, *Journal of Labor Economics*, and *Journal of Public Economics*.
+Kevin Rinz is a Senior Fellow and Research Advisor at the Washington Center for Equitable Growth. Prior to joining Equitable Growth, he held research roles as an economist at the U.S. Census Bureau and as a visiting scholar with the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. He also twice served in policy roles at the White House Council of Economic Advisers, first as a staff economist in 2013–2014 and then as a senior economist in 2021–2022. His research focuses on how policy can help people succeed in the labor market, and his work has appeared in journals including *The Quarterly Journal of Economics*, *The Review of Economics and Statistics*, *Journal of Human Resources*, *Journal of Labor Economics*, and *Journal of Public Economics*.
 
 ### Updates
 
