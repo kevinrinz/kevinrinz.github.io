@@ -8,6 +8,8 @@ Kevin Rinz is a Senior Fellow and Research Advisor at the Washington Center for 
 
 ### Updates
 
+2025-03-11: Posted a new paper, **"The Rise of Healthcare obs"** - download [paper](healthcare_jobs.pdf){:target="_blank"}
+
 2024-08-26: Posted a new paper, **"Granular Income Inequality and Mobility using IDDA: Exploring Patterns across
 Race and Ethnicity"** - download [paper](idda.pdf){:target="_blank"}, [data](https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america/data-center){:target="_blank"}
 

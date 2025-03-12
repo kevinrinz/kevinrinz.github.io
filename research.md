@@ -32,6 +32,8 @@ forthcoming.
   - Coverage: [VoxEU](https://voxeu.org/article/effects-private-school-subsidy-programmes-school-revenue-and-enrolment){:target="_blank"}, [Chalkbeat](https://www.chalkbeat.org/posts/us/2017/07/30/do-vouchers-actually-expand-school-choice-not-necessarily-it-depends-on-how-theyre-designed/){:target="_blank"}
 
 ### Working Papers
+- **"The Rise of Healthcare Jobs"** (with Joshua Gottlieb, Neale Mahoney, and Victoria Udalova)
+  - Download: [paper](healthcare_jobs.pdf){:target="_blank"} (March 2025)
 - **"The Effect of Emergency Financial Assistance on Employment and Earnings"** (with Daniel Hungerman, David Phillips, and James Sullivan)
   - Download: [paper](efa.pdf){:target="_blank"} (January 2024), [NBER version](w32856.pdf){:target="_blank"} (July 2024), [non-technical summary](efa_summary.pdf){:target="_blank"}
 - **"Re-examining Regional Income Convergence: A Distributional Approach"** (with John Voorheis)

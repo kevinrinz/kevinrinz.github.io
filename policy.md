@@ -4,6 +4,7 @@ layout: default
 ## Policy Writing
 
 ### Blog Posts
+- [As the U.S. labor market stabilizes, is nominal wage growth now too hot?](https://equitablegrowth.org/as-the-u-s-labor-market-stabilizes-is-nominal-wage-growth-now-too-hot/){:target=_blank}, February 2025
 - [The U.S. labor market keeps beating projections](https://equitablegrowth.org/the-u-s-labor-market-keeps-beating-projections/){:target=_blank}, November 2024
 - [Changing earnings requirements for Unemployment Insurance could improve access and better support U.S. workers](https://equitablegrowth.org/changing-earnings-requirements-for-unemployment-insurance-could-improve-access-and-better-support-u-s-workers/){:target=_blank}, October 2024
 - [The upcoming U.S. election's most important policy effects are under the radar](https://equitablegrowth.org/the-upcoming-u-s-elections-most-important-policy-effects-are-under-the-radar/){:target=_blank}, September 2024
