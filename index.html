@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M0QFCQGW3V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-M0QFCQGW3V');
+  </script>
+  <meta charset="utf-8" />
+  <title>Kevin Rinz | Research & Policy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Kevin Rinz – economist focused on policy-oriented labor market research" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+  /* ====== THEME TOKENS ====== */
+  :root {
+    --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bg: #ffffff;
+    --bg-alt: #f5f7fa;
+    --bg-accent: #eef2f7;
+    --text: #1b2430;
+    --text-light: #5b6472;
+    /*--link: #0b63ce;
+    --link-hover: #094f9f;*/
+    --link: #0096d7;
+    --link-hover: #e46d0a;
+    --border: #d9e1ea;
+    /*--accent: #1d6ef0;*/
+    --accent: #0096d7;
+    --accent-rgb: 29,110,240;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.06), 0 1px 4px -1px rgba(0,0,0,.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+    --radius-sm: .375rem;
+    --radius: .65rem;
+    --radius-lg: 1.2rem;
+    --content-max: 1160px;
+    --transition: 140ms cubic-bezier(.4,0,.2,1);
+    --focus-ring: 0 0 0 3px rgba(var(--accent-rgb), .35);
+  }
+  [data-theme="dark"] {
+    --bg: #0f1318;
+    --bg-alt: #161c23;
+    --bg-accent: #1d2530;
+    --text: #ecf1f5;
+    --text-light: #b3bcc8;
+    /*--link: #5aa9ff;
+    --link-hover: #8bc3ff;*/
+    --link: #0096d7;
+    --link-hover: #e46d0a;
+    --border: #2e3844;
+    /*--accent: #6dabff;*/
+    --accent: #0096d7;
+    --accent-rgb: 109,171,255;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.6), 0 1px 4px -1px rgba(0,0,0,.6);
+    --shadow-md: 0 4px 14px rgba(0,0,0,.65);
+  }
+
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    margin:0;
+    font-family:var(--font-sans);
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.52;
+    -webkit-font-smoothing:antialiased;
+  }
+  a { color:var(--link); text-decoration:none; }
+  a:hover,a:focus { color:var(--link-hover); }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline:var(--focus-ring); border-radius:var(--radius-sm); }
+  img { max-width:100%; display:block; height:auto; }
+
+  /* Skip link */
+  .skip-link {
+    position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+  }
+  .skip-link:focus {
+    left:50%; top:.75rem; width:auto; height:auto; padding:.7rem 1rem;
+    background:var(--accent); color:#fff; z-index:1000; transform:translateX(-50%);
+    border-radius:var(--radius-sm);
+  }
+
+  /* Header & Nav */
+  header.site-header {
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);
+    background:linear-gradient(to bottom, rgba(var(--accent-rgb),0.08), rgba(var(--accent-rgb),0.02)) var(--bg-alt);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-wrap {
+    max-width:var(--content-max); margin:0 auto; padding:.4rem 1.2rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+  }
+  .brand { font-weight:600; font-size:1.05rem; letter-spacing:.5px; display:flex; align-items:center; gap:.55rem; }
+  .brand span.logo-circle {
+    width:34px; height:34px; background:linear-gradient(135deg,var(--accent),#5f9bff);
+    border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:600; font-size:.85rem; box-shadow:var(--shadow-sm);
+  }
+  nav ul { list-style:none; margin:0; padding:0; display:flex; gap:.3rem; flex-wrap:wrap; }
+  nav a {
+    position:relative; padding:.55rem .9rem; font-size:.87rem; font-weight:500;
+    color:var(--text-light); border-radius:var(--radius-sm); display:inline-flex; align-items:center;
+    transition:var(--transition); line-height:1;
+  }
+  nav a.active, nav a:hover { background:var(--bg-accent); color:var(--text); }
+  .theme-toggle {
+    margin-left:auto; display:inline-flex; align-items:center; gap:.4rem;
+    font-size:.75rem; font-weight:500; cursor:pointer; background:var(--bg-accent);
+    color:var(--text-light); border:1px solid var(--border); padding:.45rem .75rem;
+    border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); transition:var(--transition);
+  }
+  .theme-toggle:hover { color:var(--text); }
+
+  /* Layout */
+  main { max-width:var(--content-max); margin:0 auto; padding:2.4rem 1.2rem 4rem; }
+  section { margin-block:3.5rem; scroll-margin-top:84px; }
+  section:first-of-type { margin-top:2rem; }
+
+  .section-head {
+    display:flex; align-items:baseline; gap:.9rem; flex-wrap:wrap;
+    margin-bottom:1.1rem;
+  }
+  .section-head h2 {
+    margin:0; font-size:clamp(1.55rem, 2.2vw + .6rem, 2.3rem);
+    letter-spacing:.5px; line-height:1.15;
+    /*background:linear-gradient(90deg,var(--accent),var(--link-hover));*/
+    color: #0096d7;
+    /*-webkit-background-clip:text; color:transparent;*/
+  }
+  .section-head .tagline { font-size:.9rem; font-weight:500; color:var(--text-light); }
+
+  .two-col {
+    display:grid; gap:2.2rem;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+  @media (max-width:960px){ .two-col { grid-template-columns:1fr; } }
+
+  .plain-list {
+    list-style:none; margin:0; padding:0; display:block;
+  }
+  .plain-list li {
+    margin:0 0 .55rem 0; line-height:1.45;
+  }
+  .plain-list li:last-child { margin-bottom:0; }
+
+  .pub-list {
+    list-style:none; margin:0; padding:0; display:grid; gap:.8rem;
+  }
+  .pub-item {
+    background:var(--bg-alt); padding:1rem 1.05rem 1.05rem;
+    border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow-sm); transition:var(--transition);
+    position:relative;
+  }
+  .pub-item:hover { background:var(--bg-accent); }
+  .pub-item h3 {
+    font-size:1rem; margin:.15rem 0 .55rem; line-height:1.3;
+  }
+
+  .inline-links a,
+  .button-chip {
+    font-size:.7rem; font-weight:500; padding:.3rem .55rem; background:var(--bg);
+    border:1px solid var(--border); border-radius:999px; display:inline-block;
+    margin:.2rem .35rem .2rem 0; white-space:nowrap; cursor:pointer; line-height:1.1;
+    transition:var(--transition);
+  }
+  .inline-links a:hover, .button-chip:hover { background:var(--bg-accent); }
+
+  blockquote.note {
+    margin:1.2rem 0; padding:1rem 1.2rem; background:var(--bg-accent);
+    border-left:5px solid var(--accent); border-radius:var(--radius-sm);
+    font-size:.92rem; color:var(--text-light);
+  }
+
+  /* Headshot */
+  .headshot {
+    max-width:320px; margin:0 0 1.2rem; border-radius:12px%; overflow:hidden;
+    box-shadow:var(--shadow-sm); border:2px solid var(--bg-accent);
+  }
+
+  /* Abstract Blocks */
+  .abstract-block {
+    margin-top:.7rem; border:1px solid var(--border);
+    border-radius:var(--radius-sm); background:var(--bg-alt);
+    padding:.35rem .65rem .6rem; box-shadow:var(--shadow-sm);
+  }
+  .abstract-block[open] { background:var(--bg-accent); transition:background var(--transition); }
+  .abstract-block summary { list-style:none; }
+  .abstract-toggle {
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:.45rem;
+    font-size:.68rem;
+    line-height:1;
+    letter-spacing:.7px;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:.45rem .75rem .42rem;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:999px;
+    color:var(--text-light);
+    transition:var(--transition);
+    position:relative;
+    user-select:none;
+  }
+  .abstract-block[open] .abstract-toggle {
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+  }
+  .abstract-toggle::after {
+    content:"▼";
+    font-size:.55rem;
+    transform:translateY(-1px) rotate(-90deg);
+    transition:transform 180ms ease;
+  }
+  .abstract-block[open] .abstract-toggle::after { transform:translateY(-1px) rotate(0deg); }
+  .abstract-body { margin-top:.7rem; font-size:.83rem; line-height:1.45; color:var(--text-light); }
+  .abstract-body p { margin:.4rem 0; }
+
+  /* BibTeX */
+  .bibtex-wrapper { margin-top:.6rem; }
+  .bibtex-toggle { background:var(--bg); color:var(--text-light); }
+  .bibtex-toggle:hover { background:var(--bg-accent); color:var(--text); }
+  .bibtex-panel {
+    margin-top:.45rem; border:1px solid var(--border); border-radius:var(--radius-sm);
+    background:var(--bg-accent); padding:.55rem .7rem .65rem;
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size:.7rem; line-height:1.3; white-space:pre; overflow:auto; max-height:260px;
+    position:relative; display:none;
+  }
+  .bibtex-panel.show { display:block; animation:fadeIn .25s ease; }
+  @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+  .bibtex-actions { display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.25rem; }
+  .copy-btn {
+    background:var(--accent); color:#fff; border:none; font-size:.62rem;
+    letter-spacing:.7px; text-transform:uppercase; font-weight:600;
+    padding:.4rem .65rem .38rem; border-radius:999px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:.35rem; line-height:1;
+    box-shadow:var(--shadow-sm); transition:var(--transition);
+  }
+  .copy-btn:hover { filter:brightness(1.08); }
+  .copy-btn:active { transform:translateY(1px); }
+
+  /* Footer */
+  footer {
+    border-top:1px solid var(--border); background:var(--bg-alt);
+    padding:2.5rem 1.2rem 4rem; margin-top:4rem;
+  }
+  footer .inner {
+    max-width:var(--content-max); margin:0 auto; font-size:.8rem;
+    color:var(--text-light); display:flex; flex-wrap:wrap; gap:1.5rem;
+  }
+  footer a { color:var(--text-light); }
+  footer a:hover { color:var(--text); }
+
+  /* Print */
+  .print-only { display:none; }
+  @media print {
+    header.site-header, .theme-toggle, .skip-link, .bibtex-wrapper, .abstract-toggle { display:none !important; }
+    body { background:#fff; color:#000; }
+    a { color:#000; text-decoration:underline; }
+    .print-only { display:block; }
+    section { margin-block:1.4rem; }
+  }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="nav-wrap">
+      <div class="brand"><span class="logo-circle">KR</span><a href="#home">Kevin Rinz</a></div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light/dark theme">🌗 Theme</button>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#home" data-nav>Home</a></li>
+          <li><a href="#research" data-nav>Publications</a></li>
+          <li><a href="#working" data-nav>Working Papers</a></li>
+          <li><a href="#data" data-nav>Data</a></li>
+          <li><a href="#policy" data-nav>Policy Writing</a></li>
+          <li><a href="#contact" data-nav>Contact</a></li>
+          <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+          <li><a href="https://www.briefingbook.info" target="_blank" rel="noopener">Briefing Book ↗</a></li>
+          <li><a href="https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america" target="_blank" rel="noopener">IDDA ↗</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HOME -->
+    <section id="home">
+      <div class="section-head">
+        <h2>Home</h2>
+        <div class="tagline">Policy-oriented labor market research</div>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="headshot">
+            <img src="headshot.jpg" alt="Headshot of Kevin Rinz">
+          </div>
+          <p>Kevin Rinz is a Senior Research Economist at the Federal Reserve Bank of Cleveland. Prior to joining the Cleveland Fed, he was a Senior Fellow and Research Advisor at the Washington Center for Equitable Growth. He previously held research roles as an economist at the U.S. Census Bureau and as a visiting scholar with the Opportunity and Inclusive Growth Institute at the Federal Reserve Bank of Minneapolis. He also twice served in policy roles at the White House Council of Economic Advisers, as a senior economist in 2021–2022 and as a staff economist in 2013–2014.</p>
+          <p>His research focuses on how policy can help people succeed in the labor market, and his work has appeared in journals including <em>The Quarterly Journal of Economics</em>, <em>The Review of Economics and Statistics</em>, <em>Journal of Human Resources</em>, <em>Journal of Labor Economics</em>, and <em>Journal of Public Economics</em>. He was also the founder of <a href="https://www.briefingbook.info">Briefing Book</a>, a newsletter about economic policy, and a co-principal investigator on the <a href="https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america">Income Distributions and Dynamics in America</a> project. His work has been covered in major media outlets including the New York Times, Wall Street Journal, Washington Post, Bloomberg, Business Insider, The Atlantic, The Economist, and others.</p>
+          <p><i>Any views and opinions expressed herein are those of the author and do not reflect the views of the Federal Reserve Bank of Cleveland or Board of Governors of the Federal Reserve System.</i></p>
+          <blockquote class="note">
+            <strong>Download CV:</strong> <a href="cv.pdf">PDF</a>. Explore publications, working papers, data resources, policy writing, and updates below.
+          </blockquote>
+        </div>
+        <div>
+          <h3 style="margin-top:0;">Updates</h3>
+          <ul class="plain-list">
+            <li>2025-08-18: Started a new position at the Federal Reserve Bank of Cleveland</li>
+            <li>2025-03-11: Posted a new paper, <a href="healthcare_jobs.pdf" target="_blank" rel="noopener">The Rise of Healthcare Jobs</a></li>
+            <li>2024-08-26: Posted a new paper, <a href="idda_race_ethnicity.pdf" target="_blank" rel="noopener">Granular Income Inequality and Mobility using IDDA</a> (explore <a href="https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america/data-center" target="_blank" rel="noopener">data</a>)</li>
+            <li>2024-04-22: Started new position at Washington Center for Equitable Growth</li>
+            <li>2024-01-08: Posted a new paper, <a href="efa.pdf" target="_blank" rel="noopener">The Effect of Emergency Financial Assistance on Employment and Earnings</a> (<a href="efa_summary.pdf" target="_blank" rel="noopener">non-technical summary</a>)</li>
+            <li>2023-10-02: Launched <a href="https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america" target="_blank" rel="noopener">Income Distributions and Dynamics in America</a>, a data resource on income inequality and mobility, with partners at the Minneapolis Fed's Opportunity and Inclusive Growth Institute</li>
+            <li>2023-09-11: Launched <a href="https://www.briefingbook.info" target="_blank" rel="noopener">Briefing Book</a>, a newsletter about economic policy</li>
+            <li>2023-07-17: Posted an updated working paper, <a href="physicians.pdf" target="_blank" rel="noopener">Who Values Human Capitalists’ Human Capital? Healthcare pending and Physician Earnings</a></li>
+            <li>2023-02-02: Posted a new paper, <a href="convergence.pdf" target="_blank" rel="noopener">Re-examining Regional Income Convergence: A Distributional Approach</a> (<a href="convergence_summary.pdf" target="_blank" rel="noopener">non-technical summary</a>, <a href="data/state_income_data.zip" target="_blank" rel="noopener">data</a>, <a href="data/state_income_data_readme.pdf" target="_blank" rel="noopener">readme</a>)</li>
+            <li>2020-07-21: Posted a new paper, <a href="physicians.pdf" target="_blank" rel="noopener">Who Values Human Capitalists’ Human Capital? Healthcare Spending and Physician Earnings</a> (<a href="physicians_summary.pdf" target="_blank" rel="noopener">non-technical summary</a>, <a href="data/physician_earnings_data.zip" target="_blank" rel="noopener">physician earnings data</a>)</li>
+            <li>2020-04-08: Posted a Q&A on <a href="covid19_labordata.pdf" target="_blank" rel="noopener">understanding labor market data during the COVID‑19 pandemic</a></li>
+            <li>2019-09-09: New <a href="recessions.pdf" target="_blank" rel="noopener">working paper and <a href="recession_summary.pdf" target="_blank" rel="noopener">summary</a> posted</li>
+            <li>2018-09-25: New <a href="concentration.pdf" target="_blank" rel="noopener">working paper</a> posted</li>
+            <li>2018-05-28: Site created on GitHub</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section id="research">
+      <div class="section-head">
+      <h2>Publications</h2>
+      <div class="tagline">Journal articles & book chapters</div>
+    </div>
+    <ul class="pub-list">
+      <li class="pub-item">
+        <h3>The Earnings and Labor Supply of U.S. Physicians</h3>
+        <p>Gottlieb, Joshua D., Maria Polyakova, Kevin Rinz, Hugh Shiplett, and Victoria Udalova. 2025. <em>Quarterly Journal of Economics</em> 140(2), 1243-1298.</p>
+        <div class="inline-links">
+          <a href="https://doi.org/10.1093/qje/qjaf001" target="_blank" rel="noopener">Published version</a>
+          <a href="physicians.pdf" target="_blank" rel="noopener">July 2023 version</a>
+          <a href="https://www2.census.gov/ces/wp/2020/CES-WP-20-23.pdf" target="_blank" rel="noopener">Census version</a>
+          <a href="https://www.nber.org/papers/w31469.pdf" target="_blank" rel="noopener">NBER version</a>
+          <a href="https://bfi.uchicago.edu/wp-content/uploads/2023/07/BFI_WP_2023-95.pdf" target="_blank" rel="noopener">BFI version</a>
+          <a href="https://bfi.uchicago.edu/wp-content/uploads/2023/07/Who-Values-Human-Capitalists-Human-Capital.pdf" target="_blank" rel="noopener">BFI research brief</a>
+          <a href="physicians_summary.pdf" target="_blank" rel="noopener">Authors’ non-technical summary</a>
+          <a href="data/physician_earnings_data.zip">Physician earnings data</a>
+          <a href="https://www.washingtonpost.com/business/2023/08/04/doctor-pay-shortage/" target="_blank" rel="noopener">Washington Post (1)</a>
+          <a href="https://www.washingtonpost.com/business/2023/08/11/doctor-pay-geography/" target="_blank" rel="noopener">Washington Post (2)</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-physicians">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> Is government guiding the invisible hand at the top of the labor market? We use new administrative data to measure physicians’ earnings and estimate the influence of health care policies on these earnings, physicians’ labor supply, and the allocation of talent. Combining the administrative registry of U.S. physicians with tax data, Medicare billing records, and survey responses, we find that physicians’ annual earnings average $350,000 and make up 8.6% of national health care spending. Business income makes up one-quarter of earnings and is systematically underreported in survey data. Earnings increase steeply early in the career, and there are major differences across specialties, regions, and firm sizes. The geographic pattern of earnings is unusual compared with other workers. We argue that these patterns reflect policy choices to subsidize demand for physician care, amplified by restrictions on physician entry, especially in certain specialties. Health policy has a major impact on the margin: 25% of physician fee revenue driven by Medicare reimbursements accrues to physicians personally. Physicians earn 8% of public money spent on insurance expansion. These policies in turn affect the type and quantity of medical care physicians supply, retirement timing, and the allocation of talent across specialties.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-physicians" class="bibtex-panel">@article{GottliebEtAlPhysicians2025,
+  title  = {The Earnings and Labor Supply of U.S. Physicians},
+  journal = {The Quarterly Journal of Economics},
+  volume = {140},
+  number = {2},
+  pages = {1243-1298},
+  year = {2025},
+  month = {01},
+  issn = {0033-5533},
+  doi = {10.1093/qje/qjaf001},
+  url = {https://doi.org/10.1093/qje/qjaf001},
+  eprint = {https://academic.oup.com/qje/article-pdf/140/2/1243/61430185/qjaf001.pdf},
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-efapp">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>The Effect of Emergency Financial Assistance on Mobility, SNAP Receipt, and Presence of Dependents</h3>
+        <p>Hungerman, Danial, David C. Phillips, Kevin Rinz, James X. Sullivan, and David N. Wasser. 2025. <em>AEA Papers and Proceedings</em> 115, 85-89.</p>
+        <div class="inline-links">
+          <a href="https://www.aeaweb.org/articles?id=10.1257/pandp.20251004" target="_blank" rel="noopener">Published version</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-efapp">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> This paper studies emergency financial assistance for people at risk of homelessness using federal tax and census data. We use an established quasi-experimental research design to examine how assistance affects address histories, number of children, and receipt of food benefits (SNAP) in Illinois. We find no evidence that assistance affects moves or children, but we observe a small increase in SNAP uptake among the lowest-income callers. We consider whether prior studies that limit focus to local geography estimate treatment effects with bias; we find that limiting outcomes to Illinois does not noticeably change observed treatment effects.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-efapp" class="bibtex-panel">@article{10.1257/pandp.20251004,
+  Author = {Hungerman, Daniel and Phillips, David C. and Rinz, Kevin and Sullivan, James X. and Wasser, David N.},
+  Title = {The Effect of Emergency Financial Assistance on Mobility, SNAP Receipt, and Presence of Dependents},
+  Journal = {AEA Papers and Proceedings},
+  Volume = {115},
+  Year = {2025},
+  Month = {May},
+  Pages = {85–89},
+  DOI = {10.1257/pandp.20251004},
+  URL = {https://www.aeaweb.org/articles?id=10.1257/pandp.20251004}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-efapp">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Granular Income Inequality and Mobility using IDDA: Exploring Patterns across Race and Ethnicity</h3>
+        <p>Kondo, Illenin, Kevin Rinz, Natalie Gubbay, Brandon Hawkins, John Voorheis, and Abigail Wozniak. 2024. In <em>Race, Ethnicity and Economic Statistics for the 21st Century</em>, eds. Randall Akee, Lawrence F. Katz, and Mark Loewenstein, National Bureau of Economic Research, forthcoming.</p>
+        <div class="inline-links">
+          <a href="idda.pdf" target="_blank" rel="noopener">Paper</a>
+          <a href="https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america/data-center" target="_blank" rel="noopener">Data</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-idda">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> We explore the evolution of income inequality and mobility in the US for a large number of subnational groups defined by race and ethnicity, using granular statistics describing income distributions, income mobility, and conditional income growth derived from the universe of tax filers and W-2 recipients that we observe over a two-decade period (1998–2019). We find that income inequality and income growth patterns identified from administrative tax records differ in important ways from those that one might identify in public survey sources. The full set of statistics that we construct is available publicly alongside this paper as the Income Distributions and Dynamics in America, or IDDA, dataset. Using two applications, we illustrate IDDA’s relevance for understanding income inequality trends. First, we extend Bayer and Charles (2018) beyond earnings gaps between Black and White men and document that, unlike those for other groups, earnings for both Black men and Black women fell behind earnings for White men following the Great Recession. This trend lasted through 2019, the end of the data period. Second, we document a significant reversal in the convergence of earnings for Native earners in Native areas.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-idda" class="bibtex-panel">@inbook{NBERc14963,
+ Crossref = "NBERakee-1",
+ title = "Granular Income Inequality and Mobility Using IDDA: Exploring Patterns across Race and Ethnicity",
+ author = "Illenin Kondo and Kevin Rinz and Natalie Gubbay and Brandon Hawkins and John Voorheis and Abigail Wozniak",
+ BookTitle = "Race, Ethnicity, and Economic Statistics for the 21st Century",
+ Publisher = "University of Chicago Press",
+ year = "2024",
+ month = "July",
+ URL = "http://www.nber.org/chapters/c14963",
+}
+@book{NBERakee-1,
+ title = "Race, Ethnicity, and Economic Statistics for the 21st Century",
+ author = "Randall Akee and Lawrence F. Katz and Mark Loewenstein",
+ institution = "National Bureau of Economic Research",
+ type = "Book",
+ publisher = "University of Chicago Press",
+ year = "2025",
+ URL = "https://www.nber.org/books-and-chapters/race-ethnicity-and-economic-statistics-21st-century",
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-idda">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Did Timing Matter? Life Cycle Differences in Effects of Exposure to the Great Recession</h3>
+        <p>Rinz, Kevin. 2022. <em>Journal of Labor Economics</em> 40(3), 703–735.</p>
+        <div class="inline-links">
+          <a href="recession.pdf" target="_blank" rel="noopener">Published version</a>
+          <a href="recession_appendix.pdf" target="_blank" rel="noopener">Online appendix</a>
+          <a href="recession_wp.pdf" target="_blank" rel="noopener">Working paper (Sept 2019)</a>
+          <a href="recession_summary.pdf" target="_blank" rel="noopener">Non-technical summary</a>
+          <a href="https://www.washingtonpost.com/business/2020/05/27/millennial-recession-covid/" target="_blank" rel="noopener">Washington Post</a>
+          <a href="https://www.wsj.com/articles/millennials-covid-financial-crisis-fall-behind-jobless-11596811470" target="_blank" rel="noopener">Wall Street Journal</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-recession">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> I estimate the effects of exposure to the Great Recession on employment and earnings for groups defined by year of birth over the 10 years following the beginning of the recession. Younger workers experience the largest earnings losses in percentage terms (up to 13%), in part because they remain less likely to work for high-paying employers even as their overall employment recovers more quickly than that of older workers.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-recession" class="bibtex-panel">@article{RinzTimingRecession2022,
+  title  = {Did Timing Matter? Life Cycle Differences in Effects of Exposure to the Great Recession},
+  author = {Rinz, Kevin},
+  journal= {Journal of Labor Economics},
+  year   = {2022},
+  volume = {40},
+  number = {3},
+  pages  = {703--735},
+  publisher={The University of Chicago Press}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-recession">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Labor Market Concentration, Earnings, and Inequality</h3>
+        <p>Rinz, Kevin. 2022. <em>Journal of Human Resources</em> 57(S), S251–S283.</p>
+        <div class="inline-links">
+          <a href="https://jhr.uwpress.org/content/57/S/S251.short" target="_blank" rel="noopener">Published version</a>
+          <a href="concentration.pdf" target="_blank" rel="noopener">Final pre-print</a>
+          <a href="concentration_appendix.pdf" target="_blank" rel="noopener">Online appendix</a>
+          <a href="concentration_wp.pdf" target="_blank" rel="noopener">CARRA Working Paper (Sept 2018)</a>
+          <a href="https://www.bloomberg.com/view/articles/2018-10-02/monopolists-hit-a-wall-in-local-markets" target="_blank" rel="noopener">Bloomberg</a>
+          <a href="https://qz.com/1476480/fear-mononoplies/" target="_blank" rel="noopener">Quartz</a>
+          <a href="https://www.economist.com/the-economist-explains/2021/08/11/are-labour-markets-becoming-less-competitive" target="_blank" rel="noopener">The Economist</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-concentration">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> I document trends in local industrial concentration from 1976 through 2015 and estimate effects of concentration on earnings outcomes. Local concentration generally declined over that period, unlike national concentration, which declined sharply in the early 1980s before increasing to nearly its original level beginning around 1990. Increased local concentration reduces earnings and increases inequality. Because average concentration has fallen, the 90/10 earnings ratio was six percent lower and earnings one percent higher in 2015 than they would have been if local concentration were at its 1976 level. Most demographic subgroups experience mean earnings reductions, and all experience increases ininequality.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-concentration" class="bibtex-panel">@article{RinzConcentration2022,
+  title  = {Labor Market Concentration, Earnings, and Inequality},
+  author = {Rinz, Kevin},
+  journal= {Journal of Human Resources},
+  year   = {2022},
+  volume = {57},
+  number = {S},
+  pages  = {S251--S283},
+  publisher = {University of WEisconsin Press}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-concentration">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Beyond the Classroom: The Implications of School Vouchers for Church Finances</h3>
+        <p>Hungerman, Daniel M., Kevin Rinz, and Jay Frymark. 2019. <em>Review of Economics and Statistics</em> 101(4), 588–601.</p>
+        <div class="inline-links">
+          <a href="https://direct.mit.edu/rest/article-abstract/101/4/588/58560/Beyond-the-Classroom-The-Implications-of-School" target="_blank" rel="noopener">Published version</a>
+          <a href="http://www.nber.org/papers/w23159" target="_blank" rel="noopener">NBER version</a>
+          <a href="https://www.theatlantic.com/education/archive/2017/02/the-catholic-schools-saved-by-vouchers/516888/" target="_blank" rel="noopener">The Atlantic</a>
+          <a href="http://www.businessinsider.com/catholic-schools-voucher-programs-study-2017-2/" target="_blank" rel="noopener">Business Insider</a>
+          <a href="https://www.jsonline.com/story/news/education/2017/02/14/study-vouchers-kept-milwaukee-catholic-parishes-open-but-cost-religious-activity/97855218/" target="_blank" rel="noopener">Milwaukee Journal-Sentinel</a>
+          <a href="https://www.politico.com/tipsheets/morning-education/2017/02/school-vouchers-diminish-churches-religious-activities-218734" target="_blank" rel="noopener">POLITICO</a>
+          <a href="https://www.usatoday.com/story/news/2017/02/14/study-vouchers-kept-catholic-parishes-open-but-cost-religious-activity/97915968/" target="_blank" rel="noopener">USA Today</a>
+          <a href="https://www.americamagazine.org/politics-society/2017/03/01/what-trumps-call-vouchers-could-mean-catholic-schools" target="_blank" rel="noopener">America</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-beyond">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> Governments have used vouchers to spend billions of dollars on private education; much of this has gone to religiously affiliated schools. We explore the possibility that vouchers could alter the financial outcomes of religious organizations that are operating schools and thus have an impact on the spiritual, moral, and social fabric of communities. Using a data set of Catholic parish finances from Milwaukee, we show that vouchers are a dominant source of funding for many churches. Vouchers appear to offer financial stability for congregations as voucher expansion prevents church closures and mergers. However, voucher expansion causes significant declines in church donations and church revenue from noneducational sources.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-beyond" class="bibtex-panel">@article{HungermanRinzFrymark2019,
+  title  = {Beyond the Classroom: The Implications of School Vouchers for Church Finances},
+  author = {Hungerman, Daniel M. and Rinz, Kevin and Frymark, Jay},
+  journal= {Review of Economics and Statistics},
+  year   = {2019},
+  volume = {101},
+  number = {4},
+  pages  = {588--601}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-beyond">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Political Campaigns and Church Contributions</h3>
+        <p>Hungerman, Daniel M., Kevin Rinz, Tim Weninger, and Chungeun Yoon. 2018. <em>Journal of Economic Behavior and Organization</em>.</p>
+        <div class="inline-links">
+          <a href="https://www.sciencedirect.com/science/article/pii/S0167268118302531" target="_blank" rel="noopener">Published version</a>
+          <a href="http://www.nber.org/papers/w24374" target="_blank" rel="noopener">NBER version</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-campaigns">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> We combine a new dataset of weekly Catholic church donations with a new dataset of presidential-election campaign stops to explore the impact of stops on donations. We find that stops increase donations, with a campaign stop generating 2 percent more donations in the following week. Our results suggest that this effect is of short duration. Using a well-known list of politically-motivated words, we find that this effect does not appear to vary based on the political language used by the parish. Our results underscore the contemporary political dimension of US religiosity and the elemental relationship between religious and political events more generally.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-campaigns" class="bibtex-panel">@article{HungermanEtAlCampaigns2018,
+  title  = {Political Campaigns and Church Contributions},
+  author = {Hungerman, Daniel M. and Rinz, Kevin and Weninger, Tim and Yoon, Chungeun},
+  journal= {Journal of Economic Behavior and Organization},
+  volume = {155},
+  pages = {403--426},
+  year = {2018}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-campaigns">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Where Does Voucher Funding Go? How Large-scale Subsidy Programs Affect Private-school Revenue, Enrollment, and Prices</h3>
+        <p>Hungerman, Daniel M. and Kevin Rinz. 2016. <em>Journal of Public Economics</em> 136, 62–85.</p>
+        <div class="inline-links">
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0047272716000426" target="_blank" rel="noopener">Published version</a>
+          <a href="https://www.nber.org/system/files/working_papers/w21687/w21687.pdf" target="_blank" rel="noopener">NBER version</a>
+          <a href="https://voxeu.org/article/effects-private-school-subsidy-programmes-school-revenue-and-enrolment" target="_blank" rel="noopener">VoxEU</a>
+          <a href="https://www.chalkbeat.org/posts/us/2017/07/30/do-vouchers-actually-expand-school-choice-not-necessarily-it-depends-on-how-theyre-designed/" target="_blank" rel="noopener">Chalkbeat</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-voucher">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body">
+            <p><strong>Abstract:</strong> Using a new dataset constructed from nonprofit tax-returns, this paper explores how vouchers and other large-scale programs subsidizing private school attendance have affected the fiscal outcomes of private schools and the affordability of a private education. We find that subsidy programs created a large transfer of public funding to private schools, suggesting that every dollar of funding increased revenue by a dollar or more. Turning to the incidence of subsidies and the impact of subsidies on enrollment, our findings depend on the type of program introduced: programs that restrict eligibility to certain groups of students create large enrollment gains but no change in price, while programs that offer unrestricted subsidies lead to price increases but no change in enrollment. We calculate elasticities of demand and supply for private schools, and discuss welfare effects.</p>
+          </div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-voucher" class="bibtex-panel">@article{HungermanRinzVoucher2016,
+  title  = {Where Does Voucher Funding Go? How Large-scale Subsidy Programs Affect Private-school Revenue, Enrollment, and Prices},
+  author = {Hungerman, Daniel M. and Rinz, Kevin},
+  journal= {Journal of Public Economics},
+  year   = {2016},
+  volume = {136},
+  pages  = {62--85}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-voucher">Copy BibTeX</button></div>
+        </div>
+      </li>
+    </ul>
+    </section>
+
+    <!-- WORKING PAPERS & IN PROGRESS -->
+    <section id="working">
+      <div class="section-head">
+      <h2>Working Papers & In Progress</h2>
+      <div class="tagline">Draft papers & projects in development</div>
+    </div>
+
+    <h3 style="margin-top:0;">Working Papers</h3>
+    <ul class="pub-list">
+      <li class="pub-item">
+        <h3>The Rise of Healthcare Jobs</h3>
+        <p>Gottlieb, Joshua D., Neale Mahoney, Kevin Rinz, and Victoria Udalova. 2025.</p>
+        <div class="inline-links">
+          <a href="healthcare_jobs.pdf" target="_blank" rel="noopener">Paper (March 2025)</a>
+          <a href="https://www.nber.org/system/files/working_papers/w33583/w33583.pdf" target="_blank" rel="noopener">NBER version (March 2025)</a>
+          <a href="https://www.nytimes.com/interactive/2025/07/03/business/economy/healthcare-jobs.html?unlocked_article_code=1.Tk8.rDQQ.EtU6QC8U4Wt8&smid=nytcore-ios-share&referringSource=articleShare" target="_blank" rel="noopener">New York Times</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-rise">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> Healthcare employment has grown more than twice as fast as the labor force since 1980, overtaking retail trade to become the largest industry by employment in 2009. We document key facts about the rise of healthcare jobs. Earnings for healthcare workers have risen nearly twice as fast as those in other industries, with relatively large increases in the middle and upper-middle parts of the earnings distribution. Healthcare workers have remained predominantly female, with increases in the share of female doctors offsetting increases in the shares of male nurses and aides. Despite a few high-profile examples to the contrary, regions experiencing manufacturing job losses have not systematically reinvented themselves by pivoting from "manufacturing to meds."</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-rise" class="bibtex-panel">@unpublished{GottliebEtAlRiseHealthcareJobs2025,
+  title = "The Rise of Healthcare Jobs",
+  author = "Gottlieb, Joshua D and Mahoney, Neale and Rinz, Kevin and Udalova, Victoria",
+  institution = "National Bureau of Economic Research",
+  type = "Working Paper",
+  series = "Working Paper Series",
+  number = "33583",
+  year = "2025",
+  month = "March",
+  doi = {10.3386/w33583},
+  URL = "http://www.nber.org/papers/w33583"
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-rise">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>The Effect of Emergency Financial Assistance on Employment and Earnings</h3>
+        <p>Hungerman, Daniel M., David Phillips, Kevin Rinz, and James Sullivan. 2024.</p>
+        <div class="inline-links">
+          <a href="emergency_financial_assistance.pdf">Paper (Jan 2024)</a>
+          <a href="https://www.nber.org" target="_blank" rel="noopener">NBER version (Jul 2024)</a>
+          <a href="emergency_financial_assistance_summary.pdf">Summary</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-emergency">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> We examine the labor supply effects of short-term income transfers for families experiencing a housing crisis. We link callers of an emergency assistance homelessness prevention hotline to their federal tax records and measure their employment & earnings in years surrounding their calls. Our methodology exploits quasi-random variation in the availability of assistance to compare similar families receiving and not receiving funds. Looking up to four years post-assistance, we find evidence, especially for the lowest earners, of earnings and employment gains, and overall we find no evidence that assistance lowers earnings or employment. Our results indicate that any income effect of temporary transfers for those in crisis is minimal and that these transfers may convey labor market benefits for the poorest of the poor.</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-emergency" class="bibtex-panel">@unpublished{HungermanEtAlEmergencyAssistance2024,
+  title = "The Effect of Emergency Financial Assistance on Employment and Earnings",
+  author = "Hungerman, Daniel M and Phillips, David C and Rinz, Kevin and Sullivan, James X",
+  institution = "National Bureau of Economic Research",
+  type = "Working Paper",
+  series = "Working Paper Series",
+  number = "32856",
+  year = "2024",
+  month = "August",
+  doi = {10.3386/w32856},
+  URL = "http://www.nber.org/papers/w32856"
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-emergency">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Re-examining Regional Income Convergence: A Distributional Approach</h3>
+        <p>Rinz, Kevin and John Voorheis. 2023.</p>
+        <div class="inline-links">
+          <a href="regional_income_convergence.pdf">Paper</a>
+          <a href="regional_income_convergence_summary.pdf">Summary</a>
+          <a href="state_income_distribution_data.csv">Data</a>
+          <a href="state_income_distribution_readme.txt">Data readme</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-convergence">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> We re-examine recent trends in regional income convergence, considering the full distribution of income rather than focusing on the mean. Measuring similarity by comparing each percentile of state distributions to the corresponding percentile of the national distribution, we find that state incomes have become less similar (ie they have diverged) within the top 20 percent of the income distribution since 1969. The top percentile alone accounts for more than half of aggregate divergence across states over this period by our measure, and the top five percentiles combine to account for 93 percent. Divergence in top incomes across states appears to be driven largely by changes in top incomes among White people, while top incomes among Black people have experienced relatively little divergence.</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-convergence" class="bibtex-panel">@unpublished{RinzVoorheisConvergence2023,
+  title  = {Re-examining Regional Income Convergence: A Distributional Approach},
+  author = {Rinz, Kevin and Voorheis, John},
+  year   = {2023},
+  institution = "Center for Economic Studies, U.S. Census Bureau",
+  type = "Working Paper",
+  series = "Working Paper Series",
+  number = "23-05",
+  year = "2023",
+  month = "February",
+  URL = "https://ideas.repec.org/p/cen/wpaper/23-05.html"
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-convergence">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>The Distributional Effects of Minimum Wages: Evidence from Linked Survey and Administrative Data</h3>
+        <p>Rinz, Kevin and John Voorheis. 2018.</p>
+        <div class="inline-links">
+          <a href="minimum_wages_carra_wp.pdf">CARRA WP (Mar 2018)</a>
+          <a href="https://cdn.equitablegrowth.org" target="_blank" rel="noopener">Equitable Growth WP (May 2018)</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-minwage">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> States and localities are increasingly experimenting with higher minimum wages in response to rising income inequality and stagnant economic mobility, but commonly used public datasets offer limited op portunities to evaluate the extent to which such changes affect earnings growth. We use administrative earnings data from the Social Security Administration linked to the Current Population Survey to over come important limitations of public data and estimate effects of the minimum wage on growth incidence curves and income mobility profiles, providing insight into how cross-sectional effects of the minimum wage on earnings persist over time. Under both approaches, we find that raising the minimum wage increases earnings growth at the bottom of the distribution, and those effects persist and indeed grow in magnitude over several years. This finding is robust to a variety of specifications, including alternatives commonly used in the literature on employment effects of the minimum wage. Instrumental variables and subsample analyses indicate that geographic mobility likely contributes to the effects we identify. Extrapolating from our estimates suggests that a minimum wage increase comparable in magnitude to the increase experienced in Seattle between 2013 and 2016 would have blunted some, but not nearly all of the worst income losses suffered at the bottom of the income distribution during the Great Recession.</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-minwage" class="bibtex-panel">@unpublished{RinzVoorheisMinWage2018,
+  title  = {The Distributional Effects of Minimum Wages: Evidence from Linked Survey and Administrative Data},
+  author = {Rinz, Kevin and Voorheis, John},
+  year   = {2018},
+  institution = "Center for Administrative Records Research and Applications, U.S. Census Bureau",
+  type = "Working Paper",
+  series = "Working Paper Series",
+  number = "2018-02",
+  month = "March",
+  URL = "https://www.census.gov/content/dam/Census/library/working-papers/2018/adrm/carra-wp-2018-02.pdf"
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-minwage">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Labor Market Effects of the Affordable Care Act: Evidence from a Tax Notch</h3>
+        <p>Kucko, Kavan, Kevin Rinz, and Ben Solow. 2017.</p>
+        <div class="inline-links">
+          <a href="aca_tax_notch_carra_wp.pdf">CARRA WP (Jul 2017)</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-aca">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> States that declined to raise their Medicaid income eligibility cutoffs to 138 percent of the federal poverty level (FPL) under the Affordable Care Act (ACA) created a "coverage gap'' between their existing, often much lower Medicaid eligibility cutoffs and the FPL, the lowest level of income at which the ACA provides refundable, advanceable "premium tax credits'' to subsidize the purchase of private insurance. Lacking access to any form of subsidized health insurance, residents of those states with income in that range face a strong incentive, in the form of a large, discrete increase in post-tax income (i.e. an upward notch) at the FPL, to increase their earnings and obtain the premium tax credit. We investigate the extent to which they respond to that incentive. Using the universe of tax returns, we document excess mass, or bunching, in the income distribution surrounding this notch. Consistent with Saez (2010), we find that bunching occurs only among filers with self-employment income. Specifically, filers without children and married filers with three or fewer children exhibit significant bunching. Analysis of tax data linked to labor supply measures from the American Community Survey, however, suggests that this bunching likely reflects a change in reported income rather than a change in true labor supply. We find no evidence that wage and salary workers adjust their labor supply in response to increased availability of directly purchased health insurance.</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-aca" class="bibtex-panel">@unpublished{KuckoRinzSolowACA2017,
+  title  = {Labor Market Effects of the Affordable Care Act: Evidence from a Tax Notch},
+  author = {Kucko, Kavan and Rinz, Kevin and Solow, Ben},
+  year   = {2017},
+  institution = "Center for Administrative Records Research and Applications, U.S. Census Bureau",
+  type = "Working Paper",
+  series = "Working Paper Series",
+  number = "2017-07",
+  month = "July",
+  URL = "https://www.census.gov/content/dam/Census/library/working-papers/2017/adrm/carra-wp-2017-07.pdf"
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-aca">Copy BibTeX</button></div>
+        </div>
+      </li>
+      <li class="pub-item">
+        <h3>Undone by the Market? The Effects of School Vouchers on Educational Inputs</h3>
+        <p>Rinz, Kevin. 2015.</p>
+        <div class="inline-links">
+          <a href="undone_by_market.pdf">Download</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-undone">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> By altering the market for private schooling, large-scale school voucher programs may have effects on the educational experience of private school students beyond the effects of small-scale programs. Using
+eight large, state-level, voucher-style programs adopted between the late 1990s and mid-2000s and a unique dataset on school expenditures and teacher compensation, I estimate the effects of vouchers on educational inputs experienced by students in private school. Large-scale, voucher-style programs alter the inputs students experience in ways that tend to worsen the experience of black students while improving the experience of white students. These effects are driven by changes in inputs deployed at newly established schools. Back-ofthe-envelope calculations indicate that the market effects of vouchers are large enough to substantially reduce the benefits of moving from public to private school for black students, reversing more than 100 percent of the gains in student-teacher ratio, 87 percent of the gain in per-teacher compensation, and 51 percent of the gain in instructional hours. My estimates suggest that extrapolation from prior studies may be inappropriate when considering how larger programs affect students.</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-undone" class="bibtex-panel">@unpublished{RinzUndoneByMarket2016,
+  title  = {Undone by the Market? The Effects of School Vouchers on Educational Inputs},
+  author = {Rinz, Kevin},
+  year   = {2015},
+  note   = {Manuscript}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-undone">Copy BibTeX</button></div>
+        </div>
+      </li>
+    </ul>
+
+    <h3>Resting Papers</h3>
+    <ul class="pub-list">
+      <li class="pub-item">
+        <h3>The Effects of Right to Work Laws on Wages: Evidence from the Taft-Hartley Act of 1947</h3>
+        <p>Rinz, Kevin. 2015.</p>
+        <div class="inline-links">
+          <a href="right_to_work_taft_hartley.pdf">Download</a>
+          <button class="button-chip bibtex-toggle" data-bib-target="bib-rtw">BibTeX</button>
+        </div>
+        <details class="abstract-block">
+          <summary class="abstract-toggle">Show Abstract</summary>
+          <div class="abstract-body"><p><strong>Abstract:</strong> This paper uses an historical setting in which the introduction of “right to work” (RTW) laws was arguably exogenous - the period following passage of the Taft-Hartley Act - to produce credibly identified estimates of the effects of these laws on wages. The average effect of RTW laws on wages across all sectors of the economy is likely small and slightly negative. Some evidence indicates wage effects are more negative within the highly unionized sector.</p></div>
+        </details>
+        <div class="bibtex-wrapper">
+<pre id="bib-rtw" class="bibtex-panel">@unpublished{RinzRightToWorkTaftHartley1947,
+  title  = {The Effects of Right to Work Laws on Wages: Evidence from the Taft-Hartley Act of 1947},
+  author = {Rinz, Kevin},
+  year = {2015},
+  note   = {Manuscript}
+}</pre>
+          <div class="bibtex-actions"><button class="copy-btn" data-copy="bib-rtw">Copy BibTeX</button></div>
+        </div>
+      </li>
+    </ul>
+    </section>
+
+    <h3>Work in Progress</h3>
+    <ul class="plain-list">
+      <li>A Shock by Any Other Name? Reconsidering the Impacts of Local Demand Shocks (with Sean Bassler, David Wasser, Abigail Wozniak)</li>
+      <li>Unemployment insurance generosity and the wages of new hires (with David Wasser)</li>
+      <li>Hospital mergers and the distribution of earnings (with Jonathan Kowarski, Ellie Prager, David Wasser, and Wes Yin</li>
+      <li>Long-term effects of Medicaid (with Zoey Chopra, Atul Gupta, Amanda Kowalski, Rebecca McKibben, and David Wasser)</li>
+      <li>Long-term effects of exposure to the Great Recession (with David Wasser and Danny Yagan)</li>
+      <li>Long-term effects of minimum wages (with John Coglianese and David Wasser)</li>
+    </ul>
+
+    <!-- DATA -->
+    <section id="data">
+      <div class="section-head">
+      <h2>Data Resources</h2>
+      <div class="tagline">Public data accompanying papers</div>
+    </div>
+
+    <p><strong>Granular Income Inequality and Mobility using IDDA</strong><br>
+      Detailed measures of income inequality and moblity for various demographic groups, nationally and at the state level, 1998–2019. (<a href="https://www.minneapolisfed.org/institute/income-distributions-and-dynamics-in-america/data-center">Minneapolis Fed OIGI data explorer</a>)</p>
+
+    <p><strong>Re-examining Regional Income Convergence: A Distributional Approach</strong><br>
+      State-level income distribution data, 1998–2019. Includes data for full populations and subgroups by gender and race/ethnicity. (<a href="state_income_distribution_readme.txt">readme</a>, <a href="state_income_distribution_data.csv">data</a>)</p>
+
+    <p><strong>Who Values Human Capitalists’ Human Capital? Healthcare Spending and Physician Earnings</strong><br>
+      Mean 2017 physician earnings for the 125 largest commuting zones (1990 vintage), for all physicians and by Medicare specialty. (<a href="physician_earnings_readme.txt">readme</a>, <a href="physician_earnings.dta">dta</a>, <a href="physician_earnings.csv">csv</a>, <a href="physician_earnings_data.zip">download all</a>)</p>
+
+    <!--<h3>Code for using public data</h3>
+    <p><strong>Longitudinally linked basic monthly CPS</strong>: Panelize the CPS following Nekarda (2009). (<a href="linked_cps.do">do</a>, <a href="linked_cps_readme.txt">readme</a>, <a href="linked_cps_example.dta">example dta</a>, <a href="https://chrisnekarda.com" target="_blank" rel="noopener">Nekarda 2009</a>)</p>
+
+    <p><strong>Common county-level datasets</strong>: Assemble panels of widely used county measures.</p>
+    <ul>
+      <li><strong>Employment, unemployment, participation</strong> (BLS LAUS)
+        <ul>
+          <li>Average annual employment, unemployment, labor force participation since 1990.</li>
+          <li><a href="laus_county.do">do</a>, <a href="laus_county.dta">dta</a></li>
+        </ul>
+      </li>
+      <li><strong>Income & poverty</strong> (Census SAIPE)
+        <ul>
+          <li>Annual poverty (overall, child, children 5–17 in families) & median household income.</li>
+          <li><a href="saipe_county.do">do</a>, <a href="saipe_county.dta">dta</a></li>
+        </ul>
+      </li>
+      <li><strong>Population</strong> (SEER)
+        <ul>
+          <li>Annual county population by age, race, ethnicity, sex since 1969.</li>
+          <li><a href="seer_county.do">do</a>, <a href="seer_example.dta">example dta</a> (1990–2015)</li>
+        </ul>
+      </li>
+    </ul>-->
+    </section>
+
+    <!-- POLICY WRITING -->
+    <section id="policy">
+      <div class="section-head">
+      <h2>Policy Writing & Commentary</h2>
+      <div class="tagline">Blog posts & briefs</div>
+    </div>
+    <ul class="plain-list">
+      <li><a href="https://equitablegrowth.org/tariffs-pose-real-risks-to-the-u-s-labor-market/" target="_blank" rel="noopener">Tariffs pose real risks to the U.S. labor market</a>, May 2025</li>
+      <li><a href="https://equitablegrowth.org/why-do-some-jobs-pay-better-than-others-think-about-what-workers-do/" target="_blank" rel="noopener">Why do some jobs pay better than others? Think about what workers do</a> (with Chris Bangert-Drowns and Chiara Chanoi), May 2025</li>
+      <li><a href="https://equitablegrowth.org/what-makes-a-job-good-how-u-s-labor-market-data-can-provide-insight-to-improve-workers-economic-conditions/" target="_blank" rel="noopener">What makes a job ‘good’? How U.S. labor market data can provide insight to improve workers’ economic conditions</a> (with Chiara Chanoi), March 2025</li>
+      <li><a href="https://equitablegrowth.org/as-the-u-s-labor-market-stabilizes-is-nominal-wage-growth-now-too-hot/" target="_blank" rel="noopener">As the U.S. labor market stabilizes, is nominal wage growth now too hot?</a>, February 2025</li>
+      <li><a href="https://www.briefingbook.info/p/digging-into-post-election-partisan" target="_blank" rel="noopener">Digging into post-election partisan shifts in consumer sentiment</a> (with Leo Feler and Jack Chylak), January 2025</li>
+      <li><a href="https://equitablegrowth.org/the-u-s-labor-market-keeps-beating-projections/" target="_blank" rel="noopener">The U.S. labor market keeps beating projections</a>, November 2024</li>
+      <li><a href="https://equitablegrowth.org/changing-earnings-requirements-for-unemployment-insurance-could-improve-access-and-better-support-u-s-workers/" target="_blank" rel="noopener">Changing earnings requirements for Unemployment Insurance could improve access and better support U.S. workers</a>, October 2024</li>
+      <li><a href="https://www.briefingbook.info/p/talking-shop-the-way-forward-on-child" target="_blank" rel="noopener">Talking shop: The way forward on child care</a> (with Chloe Gibbs and Aaron Sojourner), September 2024</li>
+      <li><a href="https://equitablegrowth.org/the-upcoming-u-s-elections-most-important-policy-effects-are-under-the-radar/" target="_blank" rel="noopener">The upcoming U.S. election’s most important policy effects are under the radar</a>, September 2024</li>
+      <li><a href="https://equitablegrowth.org/new-labor-market-data-suggest-that-u-s-wage-growth-may-be-cooling-too-much/" target="_blank" rel="noopener">New labor market data suggest that U.S. wage growth may be cooling too much</a>, August 2024</li>
+      <li><a href="https://www.briefingbook.info/p/cps-sample-size-cut-may-save-some" target="_blank" rel="noopener">CPS sample size cut may save some money but would cost policymakers</a>, Julu 2024</li>
+      <li><a href="https://www.briefingbook.info/p/border-crossings-arent-what-they" target="_blank" rel="noopener">Border crossing aren't what they used to be</a>, June 2024</li>
+      <li><a href="https://equitablegrowth.org/what-is-going-on-with-wage-growth-in-the-united-states/" target="_blank" rel="noopener">What is going on with wage growth in the United States?</a>, May 2024</li>
+      <li><a href="https://www.briefingbook.info/p/proposed-cms-data-changes-risk-major" target="_blank" rel="noopener">Proposed CMS data changes risk major research fallout</a> (with Joshua Gottlieb), March 2024</li>
+      <li><a href="https://www.briefingbook.info/p/the-labor-market-is-primed-for-a" target="_blank" rel="noopener">The labor market is priemd for a soft landing</a>, January 2024</li>
+      <li><a href="https://www.briefingbook.info/p/limiting-abusive-employment-practices" target="_blank" rel="noopener">Limiting abusive employment practices requires new data</a>, October 2023</li>
+      <li><a href="https://www.briefingbook.info/p/disability-prevalence-is-rising-alongside" target="_blank" rel="noopener">Disability prevalence is rising alongside employment</a>, September 2023</li>
+      <li><a href="https://www.minneapolisfed.org/article/2023/the-long-shadow-of-the-2001-recession" target="_blank" rel="noopener">The long shadow of the 2001 recession</a>, August 2023</li>
+      <li><a href="https://bidenwhitehouse.archives.gov/cea/written-materials/2022/04/06/blocking-the-low-road-and-paving-the-high-road-management-practices-to-improve-productivity/" target="_blank" rel="noopener">Blocking the Low Road and Paving the High Road: Management Practices to Improve Productivity</a> (with Heather Boushey), April 2022</li>
+      <li><a href="https://bidenwhitehouse.archives.gov/cea/blog/2021/09/17/the-economic-benefits-of-extending-permanent-legal-status-to-unauthorized-immigrants//" target="_blank" rel="noopener">The Economic Benefits of Extending Permanent Legal Status to Unauthorized Immigrants</a> (with Cecilia Rouse, Lisa Barrow, and Evan Soltas), September 2021</li>
+      <li><a href="https://bidenwhitehouse.archives.gov/cea/blog/2021/05/28/supporting-labor-supply-in-the-american-jobs-plan-and-the-american-families-plan/" target="_blank" rel="noopener">Supporting Labor Supply in the American Jobs Plan and the American Families Plan</a> (with Heather Boushey and Lisa Barrow), May 2021</li>
+      <li><a href="covid19_labordata.pdf" target="_blank" rel="noopener">Understanding Unemployment Insurance Claims and Other Labor Market Data During the COVID-19 Pandemic</a>, April 2020</li>
+      <li><a href="https://www.promarket.org/2019/01/02/why-local-labor-market-concentration-is-lower-than-it-used-to-be-even-as-national-concentration-increases/" target="_blank" rel="noopener">Why Local Labor Market Concentration Is Lower Than It Used to Be, Even As National Concentration Increases</a>, January 2019</li>
+      <li><a href="https://voxeu.org/article/effects-private-school-subsidy-programmes-school-revenue-and-enrolment" target="_blank" rel="noopener">How large-scale subsidy programmes affect private school revenue, enrolment, and prices</a> (with Daniel Hungerman), May 2016</li>
+    </ul>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-head">
+      <h2>Contact</h2>
+      <div class="tagline">Get in touch</div>
+    </div>
+    <address style="font-style:normal; line-height:1.5;">
+      Kevin Rinz<br>
+      Federal Reserve Bank of Cleveland<br>
+      1455 East 6th Street<br>
+      Cleveland, OH 44114<br>
+      <a href="mailto:krinz@equitablegrowth.org">kevin.rinz@clev.frb.org</a><br>
+      <a href="mailto:kjrinz@gmail.com">kjrinz@gmail.com</a><br>
+      Twitter/Bluesky: <a href="https://bsky.app/profile/kevinrinz" target="_blank" rel="noopener">@kevinrinz</a>
+    </address>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="inner">
+      <div>&copy; <span id="year"></span> Kevin Rinz. All rights reserved.</div>
+      <div>Built with lightweight HTML/CSS + vanilla JS. Dark / Light adaptive.</div>
+      <div><a href="https://github.com/">GitHub</a> · <a href="cv.pdf">CV PDF</a></div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    const root = document.documentElement;
+    const stored = localStorage.getItem('theme');
+    if(stored){ root.dataset.theme = stored; }
+    else if(window.matchMedia('(prefers-color-scheme: dark)').matches){ root.dataset.theme='dark'; }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+
+    // Intersection highlighting
+    const navLinks = [...document.querySelectorAll('[data-nav]')];
+    const sections = navLinks.map(l => document.querySelector(l.getAttribute('href')));
+    const observer = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          navLinks.forEach(l=>l.classList.remove('active'));
+          const link = navLinks.find(l=>l.getAttribute('href') === '#'+entry.target.id);
+          link && link.classList.add('active');
+        }
+      });
+    }, { rootMargin:'-40% 0px -50% 0px', threshold:.01 });
+    sections.forEach(s=>s && observer.observe(s));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Abstract toggle labels
+    document.querySelectorAll('.abstract-block').forEach(block=>{
+      const summary = block.querySelector('summary.abstract-toggle');
+      if(!summary) return;
+      const setLabel = () => {
+        summary.textContent = (block.open ? 'Hide' : 'Show') + ' Abstract';
+      };
+      setLabel();
+      block.addEventListener('toggle', setLabel);
+    });
+
+    // BibTeX toggle + copy
+    function toggleBib(id, btn){
+      const panel = document.getElementById(id);
+      if(!panel) return;
+      const showing = panel.classList.toggle('show');
+      btn.setAttribute('aria-expanded', showing ? 'true':'false');
+    }
+    document.querySelectorAll('.bibtex-toggle').forEach(btn=>{
+      const id = btn.getAttribute('data-bib-target');
+      btn.setAttribute('aria-controls', id);
+      btn.setAttribute('aria-expanded','false');
+      btn.addEventListener('click', ()=>toggleBib(id, btn));
+    });
+    document.querySelectorAll('[data-copy]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-copy');
+        const pre = document.getElementById(id);
+        if(!pre) return;
+        navigator.clipboard.writeText(pre.textContent).then(()=>{
+          const old = btn.textContent;
+          btn.textContent='Copied!';
+          setTimeout(()=>btn.textContent=old,1400);
+        }).catch(()=>{
+          btn.textContent='Failed';
+          setTimeout(()=>btn.textContent='Copy BibTeX',1400);
+        });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
