@@ -55,6 +55,8 @@
     .state-filter select, .page-size-filter select { padding: 0.5rem 0.75rem; border: 1px solid var(--gray-300); border-radius: var(--radius); font-size: 0.875rem; background: var(--white); color: var(--gray-900); box-shadow: var(--shadow); cursor: pointer; }
     .state-filter select:focus, .page-size-filter select:focus { outline: none; border-color: var(--blue-600); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.12); }
     .result-count { font-size: 0.85rem; color: var(--gray-500); white-space: nowrap; margin-left: auto; }
+    .download-btn { display: flex; align-items: center; gap: 0.35rem; padding: 0.5rem 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius); background: var(--white); font-size: 0.875rem; color: var(--gray-700); cursor: pointer; box-shadow: var(--shadow); white-space: nowrap; transition: background 0.1s, color 0.1s, border-color 0.1s; }
+    .download-btn:hover { background: var(--blue-600); color: var(--white); border-color: var(--blue-600); }
 
     /* Table */
     .table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow-md); border: 1px solid var(--gray-200); background: var(--white); }
@@ -95,6 +97,17 @@
     }
   </style>
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PWFEXPNBZR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PWFEXPNBZR');
+</script>
+
 <body>
 
   <header class="site-header">
@@ -126,6 +139,7 @@
         </select>
       </div>
       <div class="result-count" id="result-count"></div>
+      <button id="download-btn" class="download-btn" title="Download filtered results as CSV">↓ CSV</button>
     </div>
 
     <div class="table-wrap">
@@ -1705,6 +1719,23 @@
 
     prevBtn.addEventListener('click', () => { page--; render(); });
     nextBtn.addEventListener('click', () => { page++; render(); });
+
+    document.getElementById('download-btn').addEventListener('click', () => {
+      const fields = ['state','planName','investmentOption','composition','expenseRatio','planFee','totalAnnualFee','minimumInvestment','stateTaxBenefit','notes','sourceUrl'];
+      const headers = ['State','Plan Name','Investment Option','Composition','Expense Ratio','Plan Fee','Total Annual Fee','Min. Investment','State Tax Benefit','Notes','Source URL'];
+      const csvField = v => {
+        const s = v == null ? '' : String(v);
+        return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+      const sorted = applySort(applyFilters());
+      const rows = sorted.map(r => fields.map(f => csvField(r[f])).join(','));
+      const csv = [headers.join(','), ...rows].join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = '529-plans.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
 
     render();
   </script>
