@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kantor Test Calculator — FLSA Salary Thresholds</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f0f2f5; color: #222; min-height: 100vh; }
+
+  header { background: #1a2744; color: white; padding: 20px 32px; }
+  header h1 { font-size: 1.4rem; font-weight: 700; }
+  header p  { font-size: 0.85rem; color: #aac4f0; margin-top: 6px; max-width: 740px; line-height: 1.55; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
+
+  /* ── Context box ── */
+  .context {
+    background: white; border-radius: 12px; padding: 20px 24px;
+    margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border-left: 4px solid #1a2744;
+  }
+  .context h2 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .context p  { font-size: 0.875rem; line-height: 1.6; color: #333; }
+  .context p + p { margin-top: 8px; }
+
+  /* ── Threshold landmarks ── */
+  .landmarks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  .landmark  {
+    background: white; border-radius: 10px; padding: 14px 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center;
+  }
+  .landmark .lm-label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .landmark .lm-value { font-size: 1.05rem; font-weight: 700; }
+  .landmark .lm-pct   { font-size: 0.8rem; color: #888; margin-top: 4px; }
+  .landmark.current  { border-top: 3px solid #00B050; }
+  .landmark.obama    { border-top: 3px solid #E46D0A; }
+  .landmark.biden    { border-top: 3px solid #C00000; }
+
+  /* ── Main calculator ── */
+  .calc-card {
+    background: white; border-radius: 14px; padding: 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px;
+  }
+
+  .control-row {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .control-label { font-size: 0.85rem; font-weight: 600; white-space: nowrap; min-width: 130px; }
+
+  /* Salary slider */
+  .slider-wrap { flex: 1; min-width: 200px; }
+  #salary-slider { width: 100%; display: block; accent-color: #1a2744; height: 6px; cursor: pointer; margin: 0; }
+  .slider-val { width: 130px; flex-shrink: 0; text-align: right; line-height: 1.4; }
+  .slider-val .sv-wk  { font-size: 1.1rem; font-weight: 700; display: block; }
+  .slider-val .sv-ann { font-size: 0.78rem; font-weight: 500; color: #666; display: block; }
+
+  /* Slider track marks */
+  .track-marks { position: relative; height: 32px; margin-top: 4px; margin-bottom: 12px; }
+  .track-mark {
+    position: absolute; transform: translateX(-50%);
+    font-size: 0.68rem; color: #888; text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .track-mark::before {
+    content: ""; display: block; width: 1.5px; height: 8px;
+    background: #bbb; margin-bottom: 2px;
+  }
+  /* Rule/proposal labels sit one row lower so they don't crowd the $200 labels */
+  .track-mark-rule { top: 12px; }
+
+  /* ── Duties threshold pills ── */
+  .duties-divider { border: none; border-top: 1px solid #eef0f4; margin: 0 0 20px; }
+
+  .pill-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill-group input[type=radio] { display: none; }
+  .pill-group label {
+    display: inline-block; padding: 6px 14px; border-radius: 20px;
+    border: 1.5px solid #d0d5dd; cursor: pointer;
+    font-size: 0.82rem; font-weight: 600; color: #555;
+    transition: all 0.18s; user-select: none;
+  }
+  .pill-group input[type=radio]:checked + label {
+    background: #1a2744; border-color: #1a2744; color: white;
+  }
+  .pill-group label:hover { border-color: #1a2744; color: #1a2744; }
+  .pill-group input[type=radio]:checked + label:hover { color: white; }
+
+  .duties-note {
+    font-size: 0.78rem; color: #888; margin-top: 8px; line-height: 1.5;
+  }
+
+  /* Big verdict */
+  .verdict-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+  .pct-display { text-align: center; min-width: 160px; }
+  .pct-big { font-size: 4rem; font-weight: 900; line-height: 1; transition: color 0.3s; }
+  .pct-sub { font-size: 0.8rem; color: #666; margin-top: 4px; }
+
+  .verdict-text { flex: 1; min-width: 200px; }
+  .verdict-badge {
+    display: inline-block; padding: 6px 16px; border-radius: 24px;
+    font-size: 1rem; font-weight: 700; margin-bottom: 8px;
+    transition: all 0.3s;
+  }
+  .verdict-badge.valid    { background: #e6f4ea; color: #1e7e34; }
+  .verdict-badge.invalid  { background: #fde8e8; color: #b71c1c; }
+  .verdict-explain { font-size: 0.875rem; line-height: 1.6; color: #444; }
+
+  /* Gauge bar */
+  .gauge-wrap { margin-bottom: 28px; }
+  .gauge-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-bottom: 4px; }
+  .gauge-track {
+    height: 22px; background: #eee; border-radius: 8px; overflow: hidden; position: relative;
+  }
+  .gauge-fill {
+    height: 100%; border-radius: 8px;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 8px; transition: width 0.3s, background 0.3s;
+    min-width: 0px;
+  }
+  .gauge-fill span { font-size: 0.75rem; font-weight: 700; color: white; white-space: nowrap; }
+  .kantor-line {
+    position: absolute; top: 0; height: 100%;
+    width: 2px; background: #1a2744;
+  }
+  .kantor-label {
+    position: absolute; top: -18px; font-size: 0.68rem; color: #1a2744; font-weight: 700;
+    transform: translateX(-50%); white-space: nowrap;
+  }
+
+  /* Threshold markers on gauge */
+  .thresh-marker {
+    position: absolute; top: 0; height: 100%;
+    width: 1.5px; opacity: 0.6;
+  }
+  .thresh-marker-label {
+    position: absolute; bottom: -16px; font-size: 0.64rem;
+    transform: translateX(-50%); white-space: nowrap; color: #555;
+  }
+
+  /* Methods footnote */
+  .footnote {
+    background: #f8f9fa; border-radius: 8px; padding: 12px 16px;
+    font-size: 0.78rem; color: #666; line-height: 1.55;
+    border: 1px solid #e4e8ef;
+  }
+  .footnote strong { color: #444; }
+
+  /* How-to-read */
+  .how-to {
+    background: white; border-radius: 12px; padding: 20px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .how-to h2 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+  .how-to ol { padding-left: 20px; }
+  .how-to li { font-size: 0.875rem; line-height: 1.65; color: #333; }
+  .how-to li + li { margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The Kantor Test Calculator</h1>
+  <p>In 1958, DOL economist Harry Kantor found that roughly <strong>10% of workers who passed the duties test</strong> earned below the then-current salary threshold. This "Kantor standard" has been used as a benchmark for evaluating salary thresholds: when the share excluded grows substantially beyond 10%, the salary level may be doing more work than the duties analysis. Use this tool to see where any salary threshold falls relative to that benchmark.</p>
+</header>
+
+<div class="container">
+
+  <div class="landmarks">
+    <div class="landmark current" data-wk="684" style="cursor:pointer" title="Click to set slider to $684/wk">
+      <div class="lm-label">Current Rule (2019)</div>
+      <div class="lm-value">$684 / week</div>
+      <div class="lm-value" style="font-size:0.9rem;color:#555">$35,568 / year</div>
+      <div class="lm-pct" id="lm-current-pct">5.8% excluded</div>
+    </div>
+    <div class="landmark obama" data-wk="913" style="cursor:pointer" title="Click to set slider to $913/wk">
+      <div class="lm-label">Vacated 2016 Rule</div>
+      <div class="lm-value">$913 / week</div>
+      <div class="lm-value" style="font-size:0.9rem;color:#555">$47,476 / year</div>
+      <div class="lm-pct" id="lm-obama-pct">10.9% excluded</div>
+    </div>
+    <div class="landmark biden" data-wk="1128" style="cursor:pointer" title="Click to set slider to $1,128/wk">
+      <div class="lm-label">Vacated 2024 Rule</div>
+      <div class="lm-value">$1,128 / week</div>
+      <div class="lm-value" style="font-size:0.9rem;color:#555">$58,656 / year</div>
+      <div class="lm-pct" id="lm-biden-pct">18.9% excluded</div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+
+    <!-- Salary slider -->
+    <div class="control-row">
+      <span class="control-label">Weekly salary</span>
+      <div class="slider-wrap">
+        <input type="range" id="salary-slider" min="400" max="1600" step="4" value="684">
+        <div id="track-marks" class="track-marks"></div>
+      </div>
+      <span class="slider-val" id="slider-display">$684 / wk</span>
+    </div>
+
+    <!-- Duties-test threshold -->
+    <hr class="duties-divider">
+    <div class="control-row" style="margin-bottom:6px;">
+      <span class="control-label">Duties test threshold</span>
+      <div class="pill-group" id="duties-pills">
+        <input type="radio" name="duties" id="d10" value="10">
+        <label for="d10">≥10% exempt</label>
+        <input type="radio" name="duties" id="d25" value="25">
+        <label for="d25">≥25% exempt</label>
+        <input type="radio" name="duties" id="d50" value="50" checked>
+        <label for="d50">≥50% exempt</label>
+        <input type="radio" name="duties" id="d75" value="75">
+        <label for="d75">≥75% exempt</label>
+        <input type="radio" name="duties" id="d90" value="90">
+        <label for="d90">≥90% exempt</label>
+      </div>
+    </div>
+    <div class="duties-note">
+      What share of O*NET tasks must be classified as exempt for a worker to be considered a "duties-test passer"?
+      A lower threshold is more permissive (more workers pass); a higher threshold is more restrictive.
+    </div>
+
+    <!-- Gauge -->
+    <div class="gauge-wrap" style="margin-top:24px;">
+      <div class="gauge-label">
+        <span>0% of duties-test passers excluded</span>
+        <span>100%</span>
+      </div>
+      <div class="gauge-track" id="gauge-track">
+        <div id="kantor-line" class="kantor-line" style="left:10%">
+          <div class="kantor-label">Kantor 10%</div>
+        </div>
+        <!-- Threshold markers injected by JS -->
+        <div class="gauge-fill" id="gauge-fill">
+          <span id="gauge-label-inner"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div class="verdict-row">
+      <div class="pct-display">
+        <div class="pct-big" id="pct-big">10%</div>
+        <div class="pct-sub">of duties-test passers<br>earn below this threshold</div>
+      </div>
+      <div class="verdict-text">
+        <div class="verdict-badge valid" id="verdict-badge">Within Kantor Standard</div>
+        <div class="verdict-explain" id="verdict-explain"></div>
+      </div>
+    </div>
+
+    <div class="footnote">
+      <strong>Methodology note:</strong> The exclusion share is computed directly from CPS 2025 data linked to O*NET task-based exemption measures. "Duties-test passers" are salaried workers in occupations where at least the selected share of O*NET tasks are classified Exempt. Exclusion rates are known exactly at four benchmark wage levels ($684, $844, $913, $1,128/week); values between benchmarks are linearly interpolated on the log-wage scale. The exclusion rate is similar across all five duties-test definitions because earnings among workers in predominantly-exempt occupations are relatively stable regardless of exactly how strictly "passing the duties test" is defined.
+    </div>
+  </div>
+
+  <div class="how-to">
+    <h2>How the Kantor Test works</h2>
+    <ol>
+      <li>The FLSA white-collar exemptions have two parts: a <em>salary test</em> (earning above a threshold) and a <em>duties test</em> (performing executive, administrative, or professional duties).</li>
+      <li>In 1958, DOL economist Harry Kantor found that roughly 10% of workers who passed the duties test earned below the then-current salary threshold — and concluded this was acceptable because the salary threshold was meant to be a "bright line" proxy for exempt status, not to substitute entirely for the duties analysis.</li>
+      <li>As the salary threshold rises, more workers who would otherwise pass the duties test fall below it. The Kantor 10% benchmark tracks how much of the work the salary test is doing relative to the duties analysis.</li>
+      <li>The <strong>duties-test threshold</strong> selector lets you vary the definition of "passing the duties test." Because workers in occupations with any meaningful share of exempt tasks tend to earn similarly, the Kantor exclusion rate is not very sensitive to this choice.</li>
+    </ol>
+  </div>
+
+</div>
+
+<script>
+// ── Actual exclusion rates from CPS 2025 analysis ────────────────────────────
+// Each entry: [weeklyWage, pctExcluded] for "All salaried" workers.
+// Exclusion rate = share of duties-test passers who earn below the threshold.
+// Source: kantor_10pct_results.csv, subcat=="all".
+const DUTIES_DATA = {
+  10: [[684, 5.697], [844, 8.956], [913, 10.916], [1128, 18.973], [1600, 41.225]],
+  25: [[684, 5.656], [844, 8.864], [913, 10.788], [1128, 18.795], [1600, 41.001]],
+  50: [[684, 5.762], [844, 8.977], [913, 10.891], [1128, 18.895], [1600, 41.145]],
+  75: [[684, 5.228], [844, 8.058], [913,  9.889], [1128, 17.685], [1600, 39.786]],
+  90: [[684, 5.949], [844, 8.933], [913, 10.919], [1128, 19.462], [1600, 42.240]],
+};
+
+// Piecewise linear interpolation on the log-wage scale between known data points,
+// with linear extrapolation beyond the data range.
+function exclusionShare(weeklyWage) {
+  if (weeklyWage <= 0) return 0;
+  const sel = document.querySelector('input[name="duties"]:checked');
+  const key = sel ? parseInt(sel.value) : 50;
+  const data = DUTIES_DATA[key] || DUTIES_DATA[50];
+
+  // Direct lookup at anchor wages — no interpolation
+  for (const [w, p] of data) {
+    if (weeklyWage === w) return p / 100;
+  }
+
+  const logW = Math.log(weeklyWage);
+
+  if (weeklyWage <= data[0][0]) {
+    const slope = (data[1][1] - data[0][1]) / (Math.log(data[1][0]) - Math.log(data[0][0]));
+    return Math.max(0, data[0][1] + slope * (logW - Math.log(data[0][0]))) / 100;
+  }
+  if (weeklyWage >= data[data.length - 1][0]) {
+    const n = data.length;
+    const slope = (data[n-1][1] - data[n-2][1]) / (Math.log(data[n-1][0]) - Math.log(data[n-2][0]));
+    return Math.min(100, data[n-1][1] + slope * (logW - Math.log(data[n-1][0]))) / 100;
+  }
+  for (let i = 0; i < data.length - 1; i++) {
+    if (weeklyWage >= data[i][0] && weeklyWage <= data[i+1][0]) {
+      const logW0 = Math.log(data[i][0]), logW1 = Math.log(data[i+1][0]);
+      const t = (logW - logW0) / (logW1 - logW0);
+      return (data[i][1] + t * (data[i+1][1] - data[i][1])) / 100;
+    }
+  }
+  return 0;
+}
+
+// ── Thresholds ────────────────────────────────────────────────────────────────
+const THRESHOLDS = [
+  { wk: 684,  label: "Current ($684)",    color: "#00B050" },
+  { wk: 913,  label: "Obama ($913)",      color: "#E46D0A" },
+  { wk: 1128, label: "Biden ($1,128)",    color: "#C00000" },
+];
+
+const MIN_WK = 400, MAX_WK = 1600;
+
+function pctPosition(wk) {
+  return ((wk - MIN_WK) / (MAX_WK - MIN_WK)) * 100;
+}
+
+// Inject threshold markers into gauge
+const gauge = document.getElementById("gauge-track");
+THRESHOLDS.forEach(t => {
+  const pos = pctPosition(t.wk);
+  const line = document.createElement("div");
+  line.className = "thresh-marker";
+  line.style.left = pos + "%";
+  line.style.background = t.color;
+  const lbl = document.createElement("div");
+  lbl.className = "thresh-marker-label";
+  lbl.style.left = pos + "%";
+  lbl.textContent = t.label;
+  gauge.appendChild(line);
+  gauge.appendChild(lbl);
+});
+
+// ── Track marks ───────────────────────────────────────────────────────────────
+// The slider thumb has a fixed pixel width, so the thumb's centre travels
+// from THUMB_W/2 to (trackWidth - THUMB_W/2), not from 0 to trackWidth.
+// Correct for this so each label sits exactly under the thumb at that value.
+const THUMB_W = 16; // px — matches the native/styled thumb width
+function markLeft(wk) {
+  const ratio = (wk - MIN_WK) / (MAX_WK - MIN_WK);
+  // calc(ratio*100% + (0.5 - ratio) * THUMB_W px)  contracts range to [THUMB_W/2 … 100% - THUMB_W/2]
+  return `calc(${ratio * 100}% + ${(0.5 - ratio) * THUMB_W}px)`;
+}
+
+const trackEl = document.getElementById("track-marks");
+[400, 600, 684, 800, 913, 1000, 1128, 1200, 1400, 1600].forEach(wk => {
+  const m = document.createElement("div");
+  const key = THRESHOLDS.find(t => t.wk === wk);
+  m.className = "track-mark" + (key ? " track-mark-rule" : "");
+  m.style.left = markLeft(wk);
+  m.innerHTML = `$${wk}`;
+  m.style.color = key ? key.color : "#aaa";
+  if (key) m.style.fontWeight = "700";
+  trackEl.appendChild(m);
+});
+
+// ── Landmark card clicks → move slider ────────────────────────────────────────
+document.querySelectorAll(".landmark[data-wk]").forEach(card => {
+  card.addEventListener("click", () => {
+    slider.value = card.dataset.wk;
+    update();
+  });
+});
+
+// ── Landmark cards ────────────────────────────────────────────────────────────
+function updateLandmarks() {
+  document.getElementById("lm-current-pct").textContent =
+    `${(exclusionShare(684)*100).toFixed(1)}% excluded`;
+  document.getElementById("lm-obama-pct").textContent =
+    `${(exclusionShare(913)*100).toFixed(1)}% excluded`;
+  document.getElementById("lm-biden-pct").textContent =
+    `${(exclusionShare(1128)*100).toFixed(1)}% excluded`;
+}
+
+// ── Slider logic ──────────────────────────────────────────────────────────────
+const slider = document.getElementById("salary-slider");
+const display = document.getElementById("slider-display");
+
+function update() {
+  const wk  = parseInt(slider.value);
+  const ann = wk * 52;
+  const pct = exclusionShare(wk);
+  const pctRound = Math.round(pct * 100);
+
+  display.innerHTML = `<span class="sv-wk">$${wk.toLocaleString()} / wk</span><span class="sv-ann">$${ann.toLocaleString()} / yr</span>`;
+
+  // Big number
+  document.getElementById("pct-big").textContent = pctRound + "%";
+
+  // Color
+  const color = pct <= 0.10 ? "#00B050" : pct <= 0.20 ? "#E46D0A" : "#C00000";
+  document.getElementById("pct-big").style.color = color;
+
+  // Gauge
+  const gaugePct = Math.min(pct * 100, 100);
+  const gaugeEl  = document.getElementById("gauge-fill");
+  gaugeEl.style.width      = gaugePct + "%";
+  gaugeEl.style.background = color;
+  document.getElementById("gauge-label-inner").textContent = pctRound > 5 ? pctRound + "%" : "";
+
+  // Verdict
+  const badge   = document.getElementById("verdict-badge");
+  const explain = document.getElementById("verdict-explain");
+  const dutiesVal = document.querySelector('input[name="duties"]:checked').value;
+  const dutiesLabel = `≥${dutiesVal}% of tasks exempt`;
+
+  if (pct <= 0.10) {
+    badge.textContent = "Within Kantor Standard";
+    badge.className   = "verdict-badge valid";
+    badge.style.background = ""; badge.style.color = "";
+    explain.textContent = `At $${wk}/week with a duties-test threshold of ${dutiesLabel}, roughly ${pctRound}% of duties-test passers earn below the threshold — within the Kantor 10% benchmark.`;
+  } else if (pct <= 0.15) {
+    badge.textContent = "Near the Kantor Boundary";
+    badge.className   = "verdict-badge";
+    badge.style.background = "#fff3e0"; badge.style.color = "#e65100";
+    explain.textContent = `At $${wk}/week with a duties-test threshold of ${dutiesLabel}, roughly ${pctRound}% of duties-test passers earn below the threshold — modestly above the Kantor 10% benchmark.`;
+  } else {
+    badge.textContent = "Exceeds Kantor Standard";
+    badge.className   = "verdict-badge invalid";
+    badge.style.background = ""; badge.style.color = "";
+    explain.textContent = `At $${wk}/week with a duties-test threshold of ${dutiesLabel}, roughly ${pctRound}% of duties-test passers earn below the threshold — substantially above the Kantor 10% benchmark.`;
+  }
+
+  updateLandmarks();
+}
+
+slider.addEventListener("input", update);
+document.querySelectorAll('input[name="duties"]').forEach(r => r.addEventListener("change", update));
+update();
+</script>
+</body>
+</html>

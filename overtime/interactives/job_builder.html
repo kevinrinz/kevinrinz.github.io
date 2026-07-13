@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Builder — FLSA Exemption Status</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f0f2f5; color: #222;
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+
+/* ── Header ── */
+header { background: #1a2744; color: white; padding: 16px 24px; flex-shrink: 0; }
+header h1 { font-size: 1.3rem; font-weight: 700; }
+header p  { font-size: 0.82rem; color: #aac4f0; margin-top: 4px; line-height: 1.5; }
+
+/* ── Loading overlay ── */
+#loading {
+  position: fixed; inset: 0; background: rgba(255,255,255,0.9);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999; flex-direction: column; gap: 12px;
+}
+#loading p { font-size: 0.95rem; color: #555; }
+.spinner {
+  width: 36px; height: 36px; border: 4px solid #e0e4ea;
+  border-top-color: #1a2744; border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Main two-column layout ── */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Panel shared ── */
+.panel {
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(100vh - 72px);
+}
+.panel-left  { border-right: 1px solid #dde2ec; background: #f8f9fc; }
+.panel-right { background: white; }
+
+.panel-title {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #888; margin-bottom: 12px;
+}
+
+/* ── Search ── */
+.search-wrap { position: relative; margin-bottom: 16px; }
+.search-wrap input {
+  width: 100%; padding: 10px 14px 10px 36px;
+  border: 1.5px solid #d0d5dd; border-radius: 8px;
+  font-size: 0.9rem; outline: none; background: white;
+  transition: border-color 0.15s;
+}
+.search-wrap input:focus { border-color: #1a2744; }
+.search-icon {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: #aaa; font-size: 1rem; pointer-events: none;
+}
+.search-hint { font-size: 0.75rem; color: #aaa; margin-top: 6px; }
+
+/* ── Result lists ── */
+.results-section { margin-bottom: 20px; }
+.results-label {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: #999; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.results-label::after {
+  content: ""; flex: 1; height: 1px; background: #e8eaef;
+}
+
+.task-card {
+  background: white; border: 1px solid #e4e8ef; border-radius: 8px;
+  padding: 10px 12px; margin-bottom: 6px;
+  display: flex; align-items: flex-start; gap: 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.task-card:hover { border-color: #b8c4d8; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.task-card.already-added { opacity: 0.45; pointer-events: none; }
+
+.task-card-body { flex: 1; min-width: 0; }
+.task-text {
+  font-size: 0.82rem; line-height: 1.45; color: #222;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.task-occ { font-size: 0.72rem; color: #888; margin-top: 3px; }
+
+.badge {
+  display: inline-block; padding: 2px 7px; border-radius: 10px;
+  font-size: 0.68rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+  margin-top: 2px;
+}
+.badge-E { background: #e6f4ea; color: #1a7a34; }
+.badge-N { background: #fce8e8; color: #b71c1c; }
+
+.add-btn {
+  flex-shrink: 0; background: #1a2744; color: white;
+  border: none; border-radius: 6px; padding: 5px 10px;
+  font-size: 0.78rem; font-weight: 600; cursor: pointer;
+  align-self: center; transition: background 0.15s; white-space: nowrap;
+}
+.add-btn:hover { background: #2a3d6a; }
+.add-btn:disabled { background: #ccc; cursor: default; }
+
+.empty-state {
+  font-size: 0.82rem; color: #bbb; text-align: center;
+  padding: 20px 0; font-style: italic;
+}
+
+/* ── Right panel: status ── */
+.status-block {
+  text-align: center; padding: 20px 16px 16px;
+  border-bottom: 1px solid #eef0f4; margin-bottom: 16px;
+}
+.pct-label { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.pct-big { font-size: 4.5rem; font-weight: 900; line-height: 1; transition: color 0.3s; color: #ccc; }
+.pct-sub { font-size: 0.78rem; color: #888; margin-top: 4px; }
+
+.gauge-track {
+  height: 16px; background: #eee; border-radius: 8px; overflow: hidden;
+  margin: 14px 0 10px; position: relative;
+}
+.gauge-fill {
+  height: 100%; border-radius: 8px; transition: width 0.3s, background 0.3s;
+  min-width: 0;
+}
+.gauge-mid {
+  position: absolute; top: 0; left: 50%; width: 2px; height: 100%;
+  background: rgba(0,0,0,0.15);
+}
+.gauge-mid-label {
+  position: absolute; bottom: -16px; left: 50%;
+  transform: translateX(-50%); font-size: 0.65rem; color: #aaa;
+}
+
+/* Verdict badge */
+.verdict {
+  display: inline-block; padding: 5px 16px; border-radius: 20px;
+  font-size: 0.82rem; font-weight: 700; margin-top: 8px;
+}
+.verdict-likely-exempt   { background: #e6f4ea; color: #1a7a34; }
+.verdict-mixed           { background: #fff3e0; color: #b06000; }
+.verdict-likely-nonexempt { background: #fce8e8; color: #b71c1c; }
+.verdict-empty           { background: #f0f2f5; color: #aaa; }
+
+/* ── Weight toggle ── */
+.weight-toggle {
+  display: flex; gap: 0; border: 1.5px solid #d0d5dd;
+  border-radius: 8px; overflow: hidden; margin-bottom: 16px;
+}
+.weight-btn {
+  flex: 1; padding: 7px 10px; border: none; background: white;
+  font-size: 0.8rem; font-weight: 600; color: #666; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.weight-btn:first-child { border-right: 1px solid #d0d5dd; }
+.weight-btn.active { background: #1a2744; color: white; }
+
+/* ── Selected tasks ── */
+.selected-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.selected-count { font-size: 0.8rem; color: #555; font-weight: 600; }
+.clear-btn {
+  font-size: 0.75rem; color: #999; background: none; border: none;
+  cursor: pointer; padding: 2px 6px; border-radius: 4px;
+  transition: color 0.15s;
+}
+.clear-btn:hover { color: #b71c1c; }
+
+.selected-task {
+  background: white; border: 1px solid #e4e8ef; border-radius: 8px;
+  padding: 10px 12px; margin-bottom: 8px;
+}
+.selected-task-top {
+  display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px;
+}
+.selected-task-text { flex: 1; font-size: 0.82rem; line-height: 1.4; color: #222; }
+.remove-btn {
+  background: none; border: none; color: #ccc; cursor: pointer;
+  font-size: 1.1rem; line-height: 1; padding: 0 2px;
+  transition: color 0.15s; flex-shrink: 0;
+}
+.remove-btn:hover { color: #b71c1c; }
+
+.selected-task-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.exemption-label { font-size: 0.72rem; color: #888; }
+
+.freq-select {
+  font-size: 0.75rem; padding: 3px 6px; border: 1px solid #d0d5dd;
+  border-radius: 5px; color: #444; background: #fafafa; cursor: pointer;
+  outline: none;
+}
+.freq-select:focus { border-color: #1a2744; }
+
+.explanation-toggle {
+  font-size: 0.7rem; color: #1a2744; background: none; border: none;
+  cursor: pointer; text-decoration: underline; padding: 0;
+}
+.explanation-text {
+  font-size: 0.76rem; color: #555; line-height: 1.5;
+  margin-top: 6px; padding-top: 6px; border-top: 1px solid #f0f2f5;
+  display: none;
+}
+.explanation-text.open { display: block; }
+
+.empty-right {
+  text-align: center; color: #ccc; margin-top: 40px; line-height: 1.8;
+}
+.empty-right .icon { font-size: 2.5rem; margin-bottom: 8px; }
+.empty-right p { font-size: 0.85rem; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .main { grid-template-columns: 1fr; }
+  .panel { height: auto; }
+  .panel-left { border-right: none; border-bottom: 1px solid #dde2ec; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Loading task data…</p>
+</div>
+
+<header>
+  <h1>Job Builder</h1>
+  <p>Search for O*NET tasks and assemble a custom job. See the exemption status update as you build.</p>
+</header>
+
+<div class="main">
+
+  <!-- ── LEFT: Search ── -->
+  <div class="panel panel-left">
+    <div class="panel-title">Add tasks</div>
+
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search-input" placeholder="Search tasks or occupations…" autocomplete="off">
+    </div>
+    <div class="search-hint" id="search-hint">Type at least 2 characters to search 18,785 tasks.</div>
+
+    <div class="results-section" id="search-results-section" style="display:none">
+      <div class="results-label">Search results</div>
+      <div id="search-results"></div>
+    </div>
+
+    <div class="results-section" id="suggestions-section" style="display:none">
+      <div class="results-label" id="suggestions-label">Suggested from same occupation</div>
+      <div id="suggestions"></div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Status ── -->
+  <div class="panel panel-right">
+
+    <!-- Big percentage -->
+    <div class="status-block">
+      <div class="pct-label">Exempt task share</div>
+      <div class="pct-big" id="pct-big">—</div>
+      <div class="pct-sub" id="pct-sub">No tasks added yet</div>
+
+      <div class="gauge-track">
+        <div class="gauge-fill" id="gauge-fill" style="width:0%"></div>
+        <div class="gauge-mid"><div class="gauge-mid-label">50%</div></div>
+      </div>
+
+      <div class="verdict verdict-empty" id="verdict">Add tasks to begin</div>
+    </div>
+
+    <!-- Weight mode toggle -->
+    <div class="weight-toggle" id="weight-toggle">
+      <button class="weight-btn active" data-mode="equal">Equal weight</button>
+      <button class="weight-btn" data-mode="freq">Frequency weight</button>
+    </div>
+
+    <!-- Selected tasks -->
+    <div class="selected-header">
+      <span class="selected-count" id="selected-count">0 tasks selected</span>
+      <button class="clear-btn" id="clear-btn" style="display:none" onclick="clearAll()">Clear all</button>
+    </div>
+
+    <div id="selected-tasks">
+      <div class="empty-right">
+        <div class="icon">🔨</div>
+        <p>Search for tasks on the left<br>and add them to build your job.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Frequency scale (O*NET FT categories) ────────────────────────────────────
+const FREQ_OPTIONS = [
+  { label: "Yearly or less",       value: "ft1", weight: 0.02 },
+  { label: "More than once a year",value: "ft2", weight: 0.12 },
+  { label: "More than once a month",value:"ft3", weight: 0.46 },
+  { label: "More than once a week",value: "ft4", weight: 2    },
+  { label: "Daily",                value: "ft5", weight: 5    },
+  { label: "Several times a day",  value: "ft6", weight: 15   },
+  { label: "Hourly or more",       value: "ft7", weight: 40   },
+];
+const DEFAULT_FREQ = "ft4"; // "More than once a week"
+
+// ── State ────────────────────────────────────────────────────────────────────
+let ALL_TASKS   = [];        // flat array from JSON
+let BY_CODE     = {};        // code → [tasks]
+let selected    = [];        // { task, freq }
+let weightMode  = "equal";   // "equal" | "freq"
+let lastAddedCode = null;    // O*NET code of most recently added task
+
+// ── Load data ────────────────────────────────────────────────────────────────
+fetch("data/all_tasks.json")
+  .then(r => r.json())
+  .then(data => {
+    ALL_TASKS = data;
+    data.forEach(t => {
+      if (!BY_CODE[t.code]) BY_CODE[t.code] = [];
+      BY_CODE[t.code].push(t);
+    });
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("search-input").focus();
+  })
+  .catch(() => {
+    document.getElementById("loading").innerHTML =
+      "<p style='color:#b71c1c'>Failed to load task data. Make sure the local server is running.</p>";
+  });
+
+// ── Search ───────────────────────────────────────────────────────────────────
+let debounceTimer;
+document.getElementById("search-input").addEventListener("input", e => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => runSearch(e.target.value.trim()), 200);
+});
+
+function tokenize(s) {
+  return s.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean);
+}
+
+function scoreTask(task, tokens) {
+  const haystack = (task.task + " " + task.occ).toLowerCase();
+  let score = 0;
+  for (const tok of tokens) {
+    if (haystack.includes(tok)) score++;
+  }
+  return score;
+}
+
+function runSearch(q) {
+  const section = document.getElementById("search-results-section");
+  const hint    = document.getElementById("search-hint");
+  if (q.length < 2) {
+    section.style.display = "none";
+    hint.style.display = "";
+    return;
+  }
+  hint.style.display = "none";
+  section.style.display = "";
+
+  const tokens  = tokenize(q);
+  const addedIds = new Set(selected.map(s => s.task.id));
+
+  // Score and filter
+  const results = ALL_TASKS
+    .map(t => ({ t, score: scoreTask(t, tokens) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8)
+    .map(x => x.t);
+
+  renderResultList("search-results", results, addedIds);
+}
+
+// ── Suggestions ──────────────────────────────────────────────────────────────
+function showSuggestions(code, occName) {
+  const section = document.getElementById("suggestions-section");
+  const label   = document.getElementById("suggestions-label");
+  const addedIds = new Set(selected.map(s => s.task.id));
+
+  const pool = (BY_CODE[code] || []).filter(t => !addedIds.has(t.id));
+  if (pool.length === 0) { section.style.display = "none"; return; }
+
+  label.textContent = `Suggested from: ${occName}`;
+  // Pick up to 4, shuffled
+  const shuffled = pool.sort(() => Math.random() - 0.5).slice(0, 4);
+  renderResultList("suggestions", shuffled, addedIds);
+  section.style.display = "";
+}
+
+function clearSuggestions() {
+  document.getElementById("suggestions-section").style.display = "none";
+}
+
+// ── Render a task result list ─────────────────────────────────────────────────
+function renderResultList(containerId, tasks, addedIds) {
+  const el = document.getElementById(containerId);
+  if (tasks.length === 0) {
+    el.innerHTML = '<div class="empty-state">No results</div>';
+    return;
+  }
+  el.innerHTML = tasks.map(t => {
+    const added = addedIds.has(t.id);
+    return `
+      <div class="task-card${added ? " already-added" : ""}">
+        <div class="task-card-body">
+          <div class="task-text">${escHtml(t.task)}</div>
+          <div class="task-occ">${escHtml(t.occ)}</div>
+        </div>
+        <span class="badge badge-${t.det}">${t.det === "E" ? "Exempt" : "Non-exempt"}</span>
+        <button class="add-btn" ${added ? "disabled" : ""}
+          onclick="addTask(${t.id})">${added ? "Added" : "+ Add"}</button>
+      </div>`;
+  }).join("");
+}
+
+// ── Add / remove ─────────────────────────────────────────────────────────────
+function addTask(id) {
+  const task = ALL_TASKS.find(t => t.id === id);
+  if (!task || selected.find(s => s.task.id === id)) return;
+
+  selected.push({ task, freq: DEFAULT_FREQ });
+  lastAddedCode = task.code;
+
+  // Refresh search results to grey out added card
+  const q = document.getElementById("search-input").value.trim();
+  if (q.length >= 2) runSearch(q);
+
+  showSuggestions(task.code, task.occ);
+  renderSelected();
+  updateStatus();
+}
+
+function removeTask(id) {
+  selected = selected.filter(s => s.task.id !== id);
+  // Refresh suggestions if they were from the same occupation as removed task
+  if (lastAddedCode) showSuggestions(lastAddedCode,
+    selected.find(s => s.task.code === lastAddedCode)?.task.occ || "");
+  if (selected.length === 0) clearSuggestions();
+  renderSelected();
+  updateStatus();
+  const q = document.getElementById("search-input").value.trim();
+  if (q.length >= 2) runSearch(q);
+}
+
+function clearAll() {
+  selected = [];
+  lastAddedCode = null;
+  clearSuggestions();
+  renderSelected();
+  updateStatus();
+  const q = document.getElementById("search-input").value.trim();
+  if (q.length >= 2) runSearch(q);
+}
+
+function setFreq(id, freqVal) {
+  const entry = selected.find(s => s.task.id === id);
+  if (entry) { entry.freq = freqVal; updateStatus(); }
+}
+
+function toggleExplanation(id) {
+  const el = document.getElementById(`exp-${id}`);
+  if (el) el.classList.toggle("open");
+}
+
+// ── Render selected tasks ─────────────────────────────────────────────────────
+function renderSelected() {
+  const el    = document.getElementById("selected-tasks");
+  const count = document.getElementById("selected-count");
+  const clearBtn = document.getElementById("clear-btn");
+
+  count.textContent = `${selected.length} task${selected.length !== 1 ? "s" : ""} selected`;
+  clearBtn.style.display = selected.length ? "" : "none";
+
+  if (selected.length === 0) {
+    el.innerHTML = `
+      <div class="empty-right">
+        <div class="icon">🔨</div>
+        <p>Search for tasks on the left<br>and add them to build your job.</p>
+      </div>`;
+    return;
+  }
+
+  const freqOptionsHtml = FREQ_OPTIONS.map(f =>
+    `<option value="${f.value}">${f.label}</option>`
+  ).join("");
+
+  el.innerHTML = selected.map(({ task: t, freq }) => {
+    const exLabel = t.det === "E" && t.exemption
+      ? `<span class="exemption-label">${escHtml(t.exemption)} exemption</span>` : "";
+    const hasExp  = t.explanation && t.explanation.length > 0;
+    return `
+      <div class="selected-task">
+        <div class="selected-task-top">
+          <div class="selected-task-text">${escHtml(t.task)}</div>
+          <button class="remove-btn" onclick="removeTask(${t.id})" title="Remove">×</button>
+        </div>
+        <div class="selected-task-meta">
+          <span class="badge badge-${t.det}">${t.det === "E" ? "Exempt" : "Non-exempt"}</span>
+          ${exLabel}
+          <select class="freq-select freq-ctrl" data-id="${t.id}"
+            style="display:${weightMode === "freq" ? "" : "none"}"
+            onchange="setFreq(${t.id}, this.value)">
+            ${FREQ_OPTIONS.map(f =>
+              `<option value="${f.value}"${f.value === freq ? " selected" : ""}>${f.label}</option>`
+            ).join("")}
+          </select>
+          ${hasExp ? `<button class="explanation-toggle" onclick="toggleExplanation(${t.id})">why?</button>` : ""}
+        </div>
+        ${hasExp ? `<div class="explanation-text" id="exp-${t.id}">${escHtml(t.explanation)}</div>` : ""}
+      </div>`;
+  }).join("");
+}
+
+// ── Compute + display status ──────────────────────────────────────────────────
+function updateStatus() {
+  const pctBig  = document.getElementById("pct-big");
+  const pctSub  = document.getElementById("pct-sub");
+  const gauge   = document.getElementById("gauge-fill");
+  const verdict = document.getElementById("verdict");
+
+  if (selected.length === 0) {
+    pctBig.textContent  = "—";
+    pctBig.style.color  = "#ccc";
+    pctSub.textContent  = "No tasks added yet";
+    gauge.style.width   = "0%";
+    gauge.style.background = "#ccc";
+    verdict.textContent = "Add tasks to begin";
+    verdict.className   = "verdict verdict-empty";
+    return;
+  }
+
+  let numerator = 0, denominator = 0;
+  for (const { task: t, freq } of selected) {
+    const w = weightMode === "freq"
+      ? (FREQ_OPTIONS.find(f => f.value === freq)?.weight ?? 1)
+      : 1;
+    if (t.det === "E") numerator += w;
+    denominator += w;
+  }
+
+  const share = denominator > 0 ? numerator / denominator : 0;
+  const pct   = Math.round(share * 100);
+
+  const color = share >= 0.75 ? "#00B050"
+              : share >= 0.50 ? "#4caf50"
+              : share >= 0.25 ? "#E46D0A"
+              : "#C00000";
+
+  pctBig.textContent = pct + "%";
+  pctBig.style.color = color;
+
+  const nE = selected.filter(s => s.task.det === "E").length;
+  const nN = selected.length - nE;
+  if (weightMode === "equal") {
+    pctSub.textContent = `${nE} exempt, ${nN} non-exempt (equal weight)`;
+  } else {
+    pctSub.textContent = `${nE} exempt, ${nN} non-exempt (frequency weighted)`;
+  }
+
+  gauge.style.width      = pct + "%";
+  gauge.style.background = color;
+
+  if (share >= 0.75) {
+    verdict.textContent = "Likely Exempt";
+    verdict.className   = "verdict verdict-likely-exempt";
+  } else if (share >= 0.25) {
+    verdict.textContent = "Mixed — duties test uncertain";
+    verdict.className   = "verdict verdict-mixed";
+  } else {
+    verdict.textContent = "Likely Non-Exempt";
+    verdict.className   = "verdict verdict-likely-nonexempt";
+  }
+}
+
+// ── Weight mode toggle ────────────────────────────────────────────────────────
+document.getElementById("weight-toggle").addEventListener("click", e => {
+  const btn = e.target.closest(".weight-btn");
+  if (!btn) return;
+  weightMode = btn.dataset.mode;
+  document.querySelectorAll(".weight-btn").forEach(b =>
+    b.classList.toggle("active", b.dataset.mode === weightMode));
+  // Show/hide frequency selects
+  document.querySelectorAll(".freq-ctrl").forEach(s =>
+    s.style.display = weightMode === "freq" ? "" : "none");
+  updateStatus();
+});
+
+// ── Utility ───────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+</script>
+</body>
+</html>

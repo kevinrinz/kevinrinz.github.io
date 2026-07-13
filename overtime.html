@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base target="_blank">
+<title>Measuring Overtime Exemption Status: A Task-Based Approach</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, "Times New Roman", serif; background: #f0f2f5; color: #222; min-height: 100vh; line-height: 1.6; }
+  header { background: #1a2744; color: white; padding: 48px 24px; }
+  .header-inner { max-width: 820px; margin: 0 auto; }
+  header h1 { font-size: 2rem; font-weight: 800; line-height: 1.25; }
+  header .author { font-size: 1.05rem; color: #aac4f0; margin-top: 14px; }
+  header .affil  { font-size: 0.9rem; color: #8aa6d8; }
+  header .status { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: #d98a8a; margin-top: 20px; font-family: system-ui, sans-serif; }
+
+  main { max-width: 820px; margin: 0 auto; padding: 0 24px 60px; }
+
+  section { margin-top: 44px; }
+  section h2 {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: #1a2744; border-bottom: 2px solid #1a2744; padding-bottom: 8px; margin-bottom: 18px;
+  }
+
+  .abstract { background: white; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-top: 32px; }
+  .abstract p { font-size: 1rem; }
+  .abstract .meta { font-family: system-ui, sans-serif; font-size: 0.85rem; color: #444; margin-top: 16px; }
+  .abstract .meta strong { color: #1a2744; }
+
+  .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  a.card {
+    background: white; border-radius: 12px; padding: 20px 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-decoration: none; color: inherit;
+    border-left: 4px solid #0096D7; display: flex; flex-direction: column; gap: 6px;
+    transition: box-shadow 0.15s, transform 0.15s; font-family: system-ui, sans-serif;
+  }
+  a.card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.14); transform: translateY(-2px); }
+  a.card.dl { border-left-color: #00A86B; }
+  a.card.doc { border-left-color: #E46D0A; }
+  a.card .t { font-size: 1.02rem; font-weight: 700; }
+  a.card .d { font-size: 0.82rem; color: #555; line-height: 1.5; flex: 1; }
+  a.card .m { font-size: 0.74rem; font-weight: 700; color: #888; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  footer { text-align: center; padding: 32px 24px 48px; font-size: 0.78rem; color: #999; font-family: system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>Measuring Overtime Exemption Status:<br>A Task-Based Approach</h1>
+  </div>
+</header>
+
+<main>
+
+  <div class="abstract">
+    <p>This paper introduces new measures of the overtime exemption status of individual tasks measured by O*NET. Task-based measures reveal that about 60 percent of salaried workers are in occupations in which either all or no O*NET tasks are exempt. While workers with higher earnings tend to be employed in occupations in which a larger share of tasks are exempt, there is substantial variation in exempt task shares across occupations at all levels of earnings. The task content of job ads shows a similar pattern. Incorporating task-based exemption measures into extensions of prior work reveals that workers in high-exemption occupations were more likely to transition out of salaried jobs affected by changes to state overtime rules, and managerial jobs just above the federal salary level test threshold have similar exempt task content to those just below it.</p>
+    <p class="meta"><strong>Keywords:</strong> Fair Labor Standards Act, overtime, exemption, salary, O*NET, tasks, LLM<br>
+    <strong>JEL classification:</strong> J38, J88</p>
+  </div>
+
+  <section>
+    <h2>Paper</h2>
+    <div class="links">
+      <a class="card" href="overtime.pdf">
+        <div class="m">PDF · 1.4 MB</div>
+        <div class="t">Full Paper</div>
+        <div class="d">The complete working paper, including all figures, tables, and appendices.</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Data</h2>
+    <div class="links">
+      <a class="card dl" href="overtime/data/task_classifications.csv" download>
+        <div class="m">CSV · 7.2 MB</div>
+        <div class="t">Task-Level Exemption Classifications</div>
+        <div class="d">All 23,854 O*NET tasks classified as Exempt or Non-exempt, with the relevant exemption and a one-sentence explanation for each. Columns: <code>onet_soc_code, task_id, Occupation, Task, Determination, Relevant Exemption, Explanation</code>.</div>
+      </a>
+      <a class="card dl" href="overtime/data/occ_exemption_measures_consistent_2002codes.csv" download>
+        <div class="m">CSV · 1.2 MB</div>
+        <div class="t">Occupation Measures — Consistent (2002) Codes</div>
+        <div class="d">Occupation-level exempt task shares under seven weighting schemes, 2008–2026, harmonized to time-consistent 2002 Census codes that align with the DOL exemption probability codes.</div>
+      </a>
+      <a class="card dl" href="overtime/data/occ_exemption_measures_current_codes.csv" download>
+        <div class="m">CSV · 1.1 MB</div>
+        <div class="t">Occupation Measures — Current (Per-Year) Codes</div>
+        <div class="d">The same occupation-level measures with each year expressed in its own current Census code vintage (2002, 2010, or 2018), for merging onto contemporaneous survey data.</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Documentation</h2>
+    <div class="links">
+      <a class="card doc" href="overtime/data/README_task_classifications.pdf">
+        <div class="m">PDF</div>
+        <div class="t">Classification Data Guide</div>
+        <div class="d">What is in the task-level classifications file: one row per O*NET task, its columns, the Exempt/Non-exempt values, and the exemption categories.</div>
+      </a>
+      <a class="card doc" href="overtime/data/README_consistent_2002codes.pdf">
+        <div class="m">PDF</div>
+        <div class="t">Occupation Measures (Consistent Codes) Guide</div>
+        <div class="d">How the consistent-2002-code occupation measures are constructed, what each weighting scheme captures, and how to use them with the DOL probability codes.</div>
+      </a>
+      <a class="card doc" href="overtime/data/README_current_codes.pdf">
+        <div class="m">PDF</div>
+        <div class="t">Occupation Measures (Current Codes) Guide</div>
+        <div class="d">How the per-year current-code occupation measures are constructed, the seven weighting schemes, and cautions when pooling codes across vintages.</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Interactive Tools</h2>
+    <div class="links">
+      <a class="card" href="overtime/interactives/occupation_explorer.html">
+        <div class="m">Tool 01</div>
+        <div class="t">Occupation Explorer</div>
+        <div class="d">Search any job title to see its O*NET tasks classified one by one as Exempt or Non-exempt, with reasoning. Download as CSV.</div>
+      </a>
+      <a class="card" href="overtime/interactives/treemap.html">
+        <div class="m">Tool 02</div>
+        <div class="t">Exemption Treemap</div>
+        <div class="d">Full-economy treemap colored by exemption share. Drill from SOC major group to individual occupation and inspect task lists.</div>
+      </a>
+      <a class="card" href="overtime/interactives/kantor_calculator.html">
+        <div class="m">Tool 03</div>
+        <div class="t">Kantor Test Calculator</div>
+        <div class="d">Salary-threshold slider showing what share of duties-test passers are excluded at any wage, relative to the 10% Kantor standard.</div>
+      </a>
+      <a class="card" href="overtime/interactives/task_browser.html">
+        <div class="m">Tool 04</div>
+        <div class="t">Task Browser</div>
+        <div class="d">Full-text search and filter across all classified tasks by determination, exemption category, and keyword.</div>
+      </a>
+      <a class="card" href="overtime/interactives/job_builder.html">
+        <div class="m">Tool 05</div>
+        <div class="t">Job Builder</div>
+        <div class="d">Assemble a custom job from O*NET tasks and watch its exemption share update in real time, with equal or frequency-of-performance weights.</div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

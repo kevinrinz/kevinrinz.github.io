@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLSA Task Browser</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f0f2f5; color: #222; min-height: 100vh; }
+
+  header { background: #1a2744; color: white; padding: 20px 32px; }
+  header h1 { font-size: 1.4rem; font-weight: 700; }
+  header p  { font-size: 0.85rem; color: #aac4f0; margin-top: 4px; }
+
+  .toolbar {
+    background: white; border-bottom: 1px solid #dde2ea;
+    padding: 14px 24px; position: sticky; top: 0; z-index: 50;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .toolbar-top { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  #search {
+    flex: 1; min-width: 200px; max-width: 480px;
+    padding: 9px 14px; border: 1.5px solid #c8d0dc; border-radius: 8px;
+    font-size: 0.9rem; outline: none; transition: border-color 0.15s;
+  }
+  #search:focus { border-color: #0096D7; }
+
+  #result-count { font-size: 0.82rem; color: #888; white-space: nowrap; }
+
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .filter-group { display: flex; gap: 4px; }
+  .sep { width: 1px; background: #dde2ea; margin: 0 4px; }
+  .chip {
+    padding: 4px 12px; border: 1.5px solid #c8d0dc; border-radius: 20px;
+    background: white; font-size: 0.78rem; cursor: pointer; font-weight: 500;
+    transition: all 0.12s; white-space: nowrap;
+  }
+  .chip.active { background: #1a2744; color: white; border-color: #1a2744; }
+  .chip:hover:not(.active) { border-color: #0096D7; color: #0096D7; }
+  .chip.exempt-chip.active    { background: #1e7e34; border-color: #1e7e34; }
+  .chip.nonexempt-chip.active { background: #b71c1c; border-color: #b71c1c; }
+
+  .sort-label { font-size: 0.78rem; color: #888; }
+  #sort-sel {
+    padding: 4px 8px; border: 1.5px solid #c8d0dc; border-radius: 6px;
+    font-size: 0.78rem; background: white; cursor: pointer;
+  }
+
+  /* ── Cards ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 20px 16px; }
+
+  .card {
+    background: white; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border-left: 4px solid #ccc;
+    display: flex; gap: 0;
+    transition: box-shadow 0.12s;
+  }
+  .card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+  .card.exempt    { border-left-color: #00B050; }
+  .card.nonexempt { border-left-color: #C00000; }
+
+  .card-body { flex: 1; padding: 14px 16px; }
+  .card-top { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .card-task { font-size: 0.92rem; font-weight: 600; line-height: 1.45; flex: 1; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 16px;
+    font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-exempt    { background: #e6f4ea; color: #1e7e34; }
+  .badge-nonexempt { background: #fde8e8; color: #b71c1c; }
+  .badge-cat       { background: #e3f0ff; color: #1565c0; }
+
+  .card-meta { font-size: 0.8rem; color: #888; margin-bottom: 6px; }
+  .card-meta .occ { color: #1a2744; font-weight: 600; cursor: pointer; }
+  .card-meta .occ:hover { text-decoration: underline; }
+  .card-explain { font-size: 0.83rem; color: #555; line-height: 1.5; }
+  .card-expand-btn {
+    background: none; border: none; color: #0096D7; font-size: 0.78rem;
+    cursor: pointer; padding: 0; margin-top: 4px; display: block;
+  }
+  .card-explain-full { display: none; }
+  .card-expand-btn.open + .card-explain-full { display: block; margin-top: 4px; }
+
+  /* ── Pagination ── */
+  .pagination {
+    display: flex; justify-content: center; align-items: center;
+    gap: 8px; padding: 20px 0; flex-wrap: wrap;
+  }
+  .page-btn {
+    padding: 6px 14px; border: 1.5px solid #c8d0dc; border-radius: 8px;
+    background: white; font-size: 0.82rem; cursor: pointer;
+    transition: all 0.1s;
+  }
+  .page-btn:hover:not(:disabled) { border-color: #0096D7; color: #0096D7; }
+  .page-btn.active { background: #1a2744; color: white; border-color: #1a2744; }
+  .page-btn:disabled { opacity: 0.4; cursor: default; }
+  .page-info { font-size: 0.82rem; color: #888; }
+
+  .no-results { text-align: center; padding: 48px; color: #aaa; font-size: 1rem; }
+  .loading    { text-align: center; padding: 60px; color: #aaa; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FLSA Task Browser</h1>
+  <p id="header-count">Browsing all classified tasks — loading…</p>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-top">
+    <input id="search" type="text" placeholder="Search task descriptions and explanations…" autocomplete="off">
+    <span id="result-count"></span>
+    <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+      <span class="sort-label">Sort:</span>
+      <select id="sort-sel">
+        <option value="occ">Occupation A–Z</option>
+        <option value="exempt_first">Exempt first</option>
+        <option value="nonexempt_first">Non-exempt first</option>
+      </select>
+    </div>
+  </div>
+  <div class="filters">
+    <div class="filter-group">
+      <button class="chip active" data-det="all">All</button>
+      <button class="chip exempt-chip" data-det="E">Exempt only</button>
+      <button class="chip nonexempt-chip" data-det="N">Non-exempt only</button>
+    </div>
+    <div class="sep"></div>
+    <div class="filter-group" id="cat-filters"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="loading" class="loading">Loading 18,785 tasks…</div>
+  <div id="cards"></div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<script>
+const PAGE_SIZE = 25;
+let allTasks = [];
+let filtered  = [];
+let page      = 1;
+let detFilter = "all";
+let catFilter = "";
+let query     = "";
+let sortMode  = "occ";
+
+const CATS = ["Executive","Administrative","Learned Professional","Creative Professional","Computer Employee","Teacher","Outside Sales"];
+
+async function init() {
+  try {
+    const res = await fetch("data/all_tasks.json");
+    allTasks = await res.json();
+
+    // Normalize Teacher variants
+    allTasks.forEach(t => {
+      if (t.exemption && t.exemption.includes("Teacher")) t.exemption = "Teacher";
+    });
+
+    document.getElementById("header-count").textContent =
+      `Browsing ${allTasks.length.toLocaleString()} O*NET tasks across 923 occupations, each classified Exempt or Non-exempt under the FLSA white-collar exemptions (2026 vintage).`;
+    document.getElementById("loading").style.display = "none";
+
+    buildCatFilters();
+    applyFilters();
+  } catch(e) {
+    document.getElementById("loading").textContent =
+      "Error loading data. Serve with: python3 -m http.server 8000 from the interactives/ directory.";
+  }
+}
+
+function buildCatFilters() {
+  const el = document.getElementById("cat-filters");
+  CATS.forEach(cat => {
+    const n = allTasks.filter(t => t.exemption === cat).length;
+    const btn = document.createElement("button");
+    btn.className = "chip";
+    btn.dataset.cat = cat;
+    btn.textContent = `${cat} (${n.toLocaleString()})`;
+    btn.addEventListener("click", () => {
+      catFilter = catFilter === cat ? "" : cat;
+      document.querySelectorAll(".chip[data-cat]").forEach(b => {
+        b.classList.toggle("active", b.dataset.cat === catFilter);
+      });
+      page = 1;
+      applyFilters();
+    });
+    el.appendChild(btn);
+  });
+}
+
+function applyFilters() {
+  const q = query.toLowerCase();
+
+  filtered = allTasks.filter(t => {
+    if (detFilter !== "all" && t.det !== detFilter) return false;
+    if (catFilter && t.exemption !== catFilter) return false;
+    if (q) {
+      const haystack = (t.task + " " + t.explanation + " " + t.occ).toLowerCase();
+      // Require all words to appear
+      if (!q.split(/\s+/).every(w => haystack.includes(w))) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  if (sortMode === "occ") {
+    filtered.sort((a,b) => a.occ.localeCompare(b.occ) || a.task.localeCompare(b.task));
+  } else if (sortMode === "exempt_first") {
+    filtered.sort((a,b) => (a.det === "E" ? 0 : 1) - (b.det === "E" ? 0 : 1) || a.occ.localeCompare(b.occ));
+  } else {
+    filtered.sort((a,b) => (a.det === "N" ? 0 : 1) - (b.det === "N" ? 0 : 1) || a.occ.localeCompare(b.occ));
+  }
+
+  document.getElementById("result-count").textContent =
+    `${filtered.length.toLocaleString()} result${filtered.length !== 1 ? "s" : ""}`;
+
+  renderPage();
+  renderPagination();
+}
+
+function renderPage() {
+  const cards = document.getElementById("cards");
+  const start = (page - 1) * PAGE_SIZE;
+  const slice = filtered.slice(start, start + PAGE_SIZE);
+
+  if (!slice.length) {
+    cards.innerHTML = `<div class="no-results">No tasks match your filters.</div>`;
+    return;
+  }
+
+  cards.innerHTML = slice.map((t, i) => {
+    const cls    = t.det === "E" ? "exempt" : "nonexempt";
+    const badge  = t.det === "E"
+      ? `<span class="badge badge-exempt">Exempt</span>`
+      : `<span class="badge badge-nonexempt">Non-exempt</span>`;
+    const catBadge = t.exemption
+      ? `<span class="badge badge-cat">${t.exemption}</span>` : "";
+
+    const hasLongExpl = t.explanation && t.explanation.length > 120;
+    const shortExpl   = hasLongExpl ? t.explanation.slice(0, 120) + "…" : t.explanation;
+
+    const explHtml = t.explanation
+      ? (hasLongExpl
+          ? `<div class="card-explain">${escHtml(shortExpl)}</div>
+             <button class="card-expand-btn" onclick="toggleExpand(this)">Show full reasoning</button>
+             <div class="card-explain-full card-explain">${escHtml(t.explanation)}</div>`
+          : `<div class="card-explain">${escHtml(t.explanation)}</div>`)
+      : `<div class="card-explain" style="color:#bbb">No reasoning recorded.</div>`;
+
+    return `<div class="card ${cls}">
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-task">${escHtml(t.task)}</div>
+          ${badge}
+          ${catBadge}
+        </div>
+        <div class="card-meta">
+          <span class="occ" onclick="goToOcc('${t.code}')">${escHtml(t.occ)}</span>
+          <span style="color:#ccc"> · </span>
+          <span>${t.code}</span>
+        </div>
+        ${explHtml}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleExpand(btn) {
+  btn.classList.toggle("open");
+  btn.textContent = btn.classList.contains("open") ? "Show less" : "Show full reasoning";
+}
+
+function goToOcc(code) {
+  window.open(`../01_occupation_explorer/index.html#${code}`, "_blank");
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const pgEl = document.getElementById("pagination");
+  if (totalPages <= 1) { pgEl.innerHTML = ""; return; }
+
+  const range = pagesToShow(page, totalPages);
+  let html = `<button class="page-btn" onclick="goPage(${page-1})" ${page===1?"disabled":""}>← Prev</button>`;
+
+  range.forEach(p => {
+    if (p === "…") {
+      html += `<span class="page-info">…</span>`;
+    } else {
+      html += `<button class="page-btn ${p===page?"active":""}" onclick="goPage(${p})">${p}</button>`;
+    }
+  });
+
+  html += `<button class="page-btn" onclick="goPage(${page+1})" ${page===totalPages?"disabled":""}>Next →</button>`;
+  html += `<span class="page-info">Page ${page} of ${totalPages}</span>`;
+  pgEl.innerHTML = html;
+}
+
+function pagesToShow(cur, total) {
+  if (total <= 9) return Array.from({length:total}, (_,i) => i+1);
+  const pages = new Set([1, total, cur, cur-1, cur+1].filter(p => p >= 1 && p <= total));
+  const sorted = [...pages].sort((a,b) => a-b);
+  const result = [];
+  let prev = 0;
+  sorted.forEach(p => {
+    if (p - prev > 2) result.push("…");
+    else if (p - prev === 2) result.push(prev + 1);
+    result.push(p);
+    prev = p;
+  });
+  return result;
+}
+
+function goPage(n) {
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (n < 1 || n > totalPages) return;
+  page = n;
+  renderPage();
+  renderPagination();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+// ── Event listeners ───────────────────────────────────────────────────────────
+let debounceTimer;
+document.getElementById("search").addEventListener("input", e => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    query = e.target.value.trim();
+    page = 1;
+    applyFilters();
+  }, 200);
+});
+
+document.querySelectorAll(".chip[data-det]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    detFilter = btn.dataset.det;
+    document.querySelectorAll(".chip[data-det]").forEach(b =>
+      b.classList.toggle("active", b.dataset.det === detFilter));
+    page = 1;
+    applyFilters();
+  });
+});
+
+document.getElementById("sort-sel").addEventListener("change", e => {
+  sortMode = e.target.value;
+  page = 1;
+  applyFilters();
+});
+
+function escHtml(s) {
+  return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+init();
+</script>
+</body>
+</html>
