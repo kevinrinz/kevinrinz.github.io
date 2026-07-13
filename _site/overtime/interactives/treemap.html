@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLSA Exemption Treemap</title>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #111827; color: #e5e7eb; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  header { background: #1a2744; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex-shrink: 0; }
+  header h1 { font-size: 1.05rem; font-weight: 700; color: white; }
+  header p  { font-size: 0.78rem; color: #aac4f0; flex: 1; min-width: 200px; }
+
+  .legend {
+    display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #ccc; flex-shrink: 0;
+  }
+  .legend-grad {
+    width: 140px; height: 12px; border-radius: 4px;
+    background: linear-gradient(to right, #C00000, #e8e8e8, #0096D7);
+  }
+
+  #breadcrumb {
+    background: #1e293b; padding: 8px 16px; font-size: 0.8rem;
+    display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap;
+    border-bottom: 1px solid #334155;
+  }
+  .crumb { color: #60a5fa; cursor: pointer; }
+  .crumb:hover { text-decoration: underline; }
+  .crumb-sep { color: #4b5563; }
+  .crumb-cur { color: #e5e7eb; font-weight: 600; }
+
+  #chart { flex: 1; overflow: hidden; position: relative; }
+  #chart svg { width: 100%; height: 100%; display: block; }
+
+  .cell rect {
+    stroke: #111827; stroke-width: 1.5;
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  .cell rect:hover { opacity: 0.85; }
+  .cell text { pointer-events: none; fill: white; dominant-baseline: hanging; }
+
+  .label-major { font-size: 13px; font-weight: 700; }
+  .label-minor { font-size: 11px; font-weight: 400; }
+  .label-pct   { font-size: 10px; opacity: 0.85; }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed; background: rgba(15,23,42,0.96); color: #e2e8f0;
+    border: 1px solid #334155; border-radius: 8px; padding: 10px 14px;
+    font-size: 0.8rem; pointer-events: none; z-index: 200;
+    max-width: 280px; line-height: 1.5; display: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+  #tooltip .tt-name { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+  #tooltip .tt-pct  { font-size: 1.1rem; font-weight: 800; }
+
+  /* Side panel */
+  #panel {
+    position: absolute; top: 0; right: 0; width: 320px; height: 100%;
+    background: #1e293b; border-left: 1px solid #334155;
+    display: flex; flex-direction: column; transform: translateX(100%);
+    transition: transform 0.25s ease; overflow: hidden;
+  }
+  #panel.open { transform: translateX(0); }
+  #panel-header {
+    padding: 14px 16px; border-bottom: 1px solid #334155;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  #panel-close {
+    background: none; border: none; color: #9ca3af; font-size: 1.2rem;
+    cursor: pointer; flex-shrink: 0; margin-left: auto; line-height: 1;
+  }
+  #panel-close:hover { color: white; }
+  #panel-title { font-weight: 700; font-size: 0.95rem; }
+  #panel-code  { font-size: 0.75rem; color: #6b7280; font-family: monospace; }
+  #panel-meter-wrap { padding: 12px 16px; border-bottom: 1px solid #334155; }
+  #panel-pct   { font-size: 2rem; font-weight: 800; }
+  #panel-bar   { height: 8px; background: #374151; border-radius: 4px; margin: 6px 0 2px; }
+  #panel-fill  { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  #panel-tasks { flex: 1; overflow-y: auto; padding: 12px 16px; }
+  .panel-task {
+    padding: 8px 0; border-bottom: 1px solid #293548; display: flex; gap: 8px;
+  }
+  .panel-task:last-child { border-bottom: none; }
+  .pt-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .pt-text { font-size: 0.8rem; line-height: 1.4; color: #d1d5db; }
+  .pt-cat  { font-size: 0.72rem; color: #6b7280; margin-top: 2px; }
+
+  #loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #111827; color: #6b7280; font-size: 1rem; z-index: 10; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>FLSA Exemption Treemap</h1>
+    <p>Each rectangle is an occupation; area = number of O*NET tasks. Color = share of tasks classified Exempt. Click a major group to zoom in, click an occupation to inspect tasks.</p>
+  </div>
+  <div class="legend">
+    <span>0%</span>
+    <div class="legend-grad"></div>
+    <span>100% Exempt</span>
+  </div>
+</header>
+
+<div id="breadcrumb">
+  <span class="crumb-cur" id="bc-root">All Occupations</span>
+</div>
+
+<div id="chart">
+  <div id="loading">Loading…</div>
+  <svg id="svg"></svg>
+  <div id="tooltip"></div>
+
+  <div id="panel">
+    <div id="panel-header">
+      <div>
+        <div id="panel-title"></div>
+        <div id="panel-code"></div>
+      </div>
+      <button id="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div id="panel-meter-wrap">
+      <div id="panel-pct"></div>
+      <div id="panel-bar"><div id="panel-fill"></div></div>
+      <div style="font-size:0.75rem;color:#6b7280" id="panel-counts"></div>
+    </div>
+    <div id="panel-tasks" id="panel-tasks"></div>
+  </div>
+</div>
+
+<script>
+let data = null;
+let allTasks = null;
+let currentRoot = null;
+let svg, g;
+
+const exemptColor    = "#0096D7";
+const nonExemptColor = "#C00000";
+const midColor       = "#d4d4d4";
+
+function pctToColor(se) {
+  // Diverging: red (0) → grey (0.5) → blue (1)
+  if (se <= 0.5) {
+    const t = se * 2;
+    return lerpColor(nonExemptColor, midColor, t);
+  } else {
+    const t = (se - 0.5) * 2;
+    return lerpColor(midColor, exemptColor, t);
+  }
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return [r,g,b];
+}
+function lerpColor(hex1, hex2, t) {
+  const [r1,g1,b1] = hexToRgb(hex1);
+  const [r2,g2,b2] = hexToRgb(hex2);
+  const r = Math.round(r1 + (r2-r1)*t);
+  const g = Math.round(g1 + (g2-g1)*t);
+  const b = Math.round(b1 + (b2-b1)*t);
+  return `rgb(${r},${g},${b})`;
+}
+
+async function init() {
+  const [treeRes, tasksRes] = await Promise.all([
+    fetch("data/treemap.json"),
+    fetch("data/all_tasks.json"),
+  ]);
+  data     = await treeRes.json();
+  allTasks = await tasksRes.json();
+  document.getElementById("loading").style.display = "none";
+  renderTreemap(data, "All Occupations", null);
+}
+
+function renderTreemap(node, label, parentNode) {
+  currentRoot = node;
+  updateBreadcrumb(label, parentNode);
+
+  const chartEl = document.getElementById("chart");
+  const W = chartEl.clientWidth;
+  const H = chartEl.clientHeight;
+
+  const svgEl = document.getElementById("svg");
+  svgEl.innerHTML = "";
+  svgEl.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+  const root = d3.hierarchy(node)
+    .sum(d => d.nt || 0)
+    .sort((a, b) => b.value - a.value);
+
+  d3.treemap()
+    .size([W, H])
+    .paddingOuter(node.children?.some(c => c.children) ? 6 : 2)
+    .paddingInner(2)
+    .paddingTop(node.children?.some(c => c.children) ? 20 : 0)
+    (root);
+
+  const svgD3 = d3.select(svgEl);
+
+  // Major group backgrounds (only at top level)
+  const isMajorLevel = node.children?.every(c => c.children);
+  if (isMajorLevel) {
+    root.children.forEach(child => {
+      // avg exemption share for the group
+      const leaves = child.leaves();
+      const avgSe = d3.mean(leaves, l => l.data.se);
+      svgD3.append("rect")
+        .attr("x", child.x0).attr("y", child.y0)
+        .attr("width", child.x1 - child.x0)
+        .attr("height", child.y1 - child.y0)
+        .attr("fill", pctToColor(avgSe))
+        .attr("opacity", 0.15)
+        .attr("rx", 4);
+
+      if (child.y1 - child.y0 > 18) {
+        svgD3.append("text")
+          .attr("x", child.x0 + 6).attr("y", child.y0 + 14)
+          .attr("class", "label-major")
+          .text(child.data.name)
+          .attr("fill", "white")
+          .attr("opacity", 0.9);
+      }
+    });
+  }
+
+  // Leaf cells
+  const leaves = isMajorLevel ? root.descendants().filter(d => !d.children) : root.children || [];
+  const cellNodes = isMajorLevel ? leaves : root.children?.flatMap(c => c.children || c.leaves()) || [];
+
+  (isMajorLevel ? root.leaves() : root.children || []).forEach(d => {
+    const isOcc = !d.children;
+    if (!isOcc && !isMajorLevel) return; // handled above
+    const wd = d.x1 - d.x0;
+    const ht = d.y1 - d.y0;
+    if (wd < 2 || ht < 2) return;
+
+    const se = isOcc ? d.data.se : d3.mean(d.leaves(), l => l.data.se);
+    const fill = pctToColor(se ?? 0.5);
+
+    const cell = svgD3.append("g").attr("class", "cell")
+      .style("cursor", "pointer")
+      .on("mousemove", (event) => showTooltip(event, d, se, isOcc))
+      .on("mouseleave", hideTooltip)
+      .on("click", () => {
+        hideTooltip();
+        if (isOcc) {
+          openPanel(d.data);
+        } else {
+          renderTreemap(d.data, d.data.name, node);
+        }
+      });
+
+    cell.append("rect")
+      .attr("x", d.x0).attr("y", d.y0)
+      .attr("width", wd).attr("height", ht)
+      .attr("fill", fill)
+      .attr("rx", 3);
+
+    const PADDING = 5;
+    if (ht > 22 && wd > 40) {
+      cell.append("text")
+        .attr("x", d.x0 + PADDING).attr("y", d.y0 + PADDING)
+        .attr("class", isOcc ? "label-minor" : "label-major")
+        .attr("clip-path", `inset(0 0 0 0)`)
+        .text(d.data.name)
+        .each(function() { truncateText(this, wd - PADDING*2); });
+    }
+    if (ht > 38 && wd > 50) {
+      cell.append("text")
+        .attr("x", d.x0 + PADDING).attr("y", d.y0 + 20)
+        .attr("class", "label-pct")
+        .text(`${Math.round((se ?? 0)*100)}% exempt`);
+    }
+  });
+
+  // For single-level (occupation) view — directly render each occupation
+  if (!isMajorLevel && root.leaves) {
+    // Already handled above via root.children
+  }
+}
+
+function truncateText(el, maxWidth) {
+  const t = d3.select(el);
+  let text = t.text();
+  while (el.getComputedTextLength && el.getComputedTextLength() > maxWidth && text.length > 3) {
+    text = text.slice(0, -4) + "…";
+    t.text(text);
+  }
+}
+
+const tooltip = document.getElementById("tooltip");
+function showTooltip(event, d, se, isOcc) {
+  const name  = d.data.name;
+  const pct   = Math.round((se ?? 0) * 100);
+  const color = pctToColor(se ?? 0.5);
+  const nt    = d.data.nt || (d.leaves ? d.leaves().reduce((s,l) => s + (l.data.nt||0), 0) : 0);
+  const ne    = d.data.ne || (d.leaves ? d.leaves().reduce((s,l) => s + (l.data.ne||0), 0) : 0);
+
+  tooltip.innerHTML = `
+    <div class="tt-name">${name}</div>
+    <div class="tt-pct" style="color:${color}">${pct}% Exempt</div>
+    <div style="font-size:0.75rem;color:#9ca3af;margin-top:3px">
+      ${ne} exempt / ${nt} total tasks${isOcc ? `<br>${d.data.code}` : ""}
+    </div>
+    ${isOcc ? `<div style="font-size:0.72rem;color:#6b7280;margin-top:4px">Click to inspect tasks</div>` : `<div style="font-size:0.72rem;color:#6b7280;margin-top:4px">Click to zoom in</div>`}
+  `;
+  tooltip.style.display = "block";
+  moveTooltip(event);
+}
+
+document.getElementById("chart").addEventListener("mousemove", moveTooltip);
+function moveTooltip(event) {
+  if (tooltip.style.display === "none") return;
+  const x = event.clientX + 14;
+  const y = event.clientY + 14;
+  const tw = tooltip.offsetWidth;
+  const th = tooltip.offsetHeight;
+  tooltip.style.left = (x + tw > window.innerWidth  ? x - tw - 24 : x) + "px";
+  tooltip.style.top  = (y + th > window.innerHeight ? y - th - 24 : y) + "px";
+}
+function hideTooltip() { tooltip.style.display = "none"; }
+
+// ── Side panel ───────────────────────────────────────────────────────────────
+function openPanel(occ) {
+  const tasks = allTasks.filter(t => t.code === occ.code);
+  const pct   = Math.round(occ.se * 100);
+  const color = pctToColor(occ.se);
+
+  document.getElementById("panel-title").textContent  = occ.name;
+  document.getElementById("panel-code").textContent   = occ.code;
+  document.getElementById("panel-pct").textContent    = pct + "% Exempt";
+  document.getElementById("panel-pct").style.color    = color;
+  document.getElementById("panel-fill").style.width   = pct + "%";
+  document.getElementById("panel-fill").style.background = color;
+  document.getElementById("panel-counts").textContent = `${occ.ne} exempt · ${occ.nt - occ.ne} non-exempt`;
+
+  const tasksEl = document.getElementById("panel-tasks");
+  tasksEl.innerHTML = tasks.map(t => {
+    const dotColor = t.det === "E" ? "#00B050" : "#C00000";
+    return `<div class="panel-task">
+      <div class="pt-dot" style="background:${dotColor}"></div>
+      <div>
+        <div class="pt-text">${escHtml(t.task)}</div>
+        ${t.exemption ? `<div class="pt-cat">${t.exemption}</div>` : ""}
+      </div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("panel").classList.add("open");
+}
+
+function closePanel() { document.getElementById("panel").classList.remove("open"); }
+
+// ── Breadcrumb ───────────────────────────────────────────────────────────────
+const crumbStack = [];
+
+function updateBreadcrumb(label, parentNode) {
+  if (!parentNode) crumbStack.length = 0;
+  if (parentNode) crumbStack.push({ label: document.getElementById("bc-root")?.textContent, node: parentNode });
+
+  const bc = document.getElementById("breadcrumb");
+  bc.innerHTML = "";
+
+  crumbStack.forEach((item, i) => {
+    const span = document.createElement("span");
+    span.className = "crumb";
+    span.textContent = item.label || "All Occupations";
+    const capturedNode = item.node;
+    const capturedStack = crumbStack.slice(0, i);
+    span.addEventListener("click", () => {
+      crumbStack.length = i;
+      renderTreemap(capturedNode, item.label, capturedStack.length ? capturedStack[capturedStack.length-1].node : null);
+    });
+    bc.appendChild(span);
+    const sep = document.createElement("span");
+    sep.className = "crumb-sep";
+    sep.textContent = " › ";
+    bc.appendChild(sep);
+  });
+
+  const cur = document.createElement("span");
+  cur.className = "crumb-cur";
+  cur.id = "bc-root";
+  cur.textContent = label;
+  bc.appendChild(cur);
+}
+
+function escHtml(s) {
+  return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+window.addEventListener("resize", () => {
+  if (currentRoot) renderTreemap(currentRoot, document.getElementById("bc-root")?.textContent || "", null);
+});
+
+init().catch(e => {
+  document.getElementById("loading").textContent =
+    "Error: serve with python3 -m http.server 8000 from the interactives/ directory.";
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLSA Duties Test: Occupation Explorer</title>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f0f2f5; color: #222; min-height: 100vh; }
+
+  header { background: #1a2744; color: white; padding: 20px 32px; }
+  header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+  header p  { font-size: 0.85rem; color: #aac4f0; margin-top: 4px; max-width: 720px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 28px 20px; }
+
+  .search-wrap { position: relative; margin-bottom: 8px; }
+  #search {
+    width: 100%; padding: 14px 18px; font-size: 1.05rem;
+    border: 2px solid #c8d0dc; border-radius: 10px;
+    outline: none; background: white;
+    transition: border-color 0.15s;
+  }
+  #search:focus { border-color: #0096D7; }
+  #search::placeholder { color: #aaa; }
+
+  #dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: white; border: 1px solid #d0d8e4; border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 100;
+    max-height: 320px; overflow-y: auto; display: none;
+  }
+  .dd-item {
+    padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0;
+    transition: background 0.1s;
+  }
+  .dd-item:last-child { border-bottom: none; }
+  .dd-item:hover, .dd-item.active { background: #eef5ff; }
+  .dd-item .dd-name { font-size: 0.95rem; font-weight: 600; }
+  .dd-item .dd-meta { font-size: 0.78rem; color: #777; margin-top: 2px; }
+
+  .hint { font-size: 0.82rem; color: #888; margin-bottom: 24px; }
+
+  /* ── Result panel ── */
+  #result { display: none; }
+
+  .occ-header {
+    background: white; border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;
+  }
+  .occ-title { flex: 1; min-width: 220px; }
+  .occ-title h2 { font-size: 1.25rem; font-weight: 700; }
+  .occ-title .code { font-size: 0.8rem; color: #888; margin-top: 2px; font-family: monospace; }
+  .occ-title .major { font-size: 0.82rem; color: #555; margin-top: 4px; }
+
+  .meter-wrap { text-align: center; min-width: 140px; }
+  .meter-wrap .pct { font-size: 2.2rem; font-weight: 800; }
+  .meter-wrap .pct-label { font-size: 0.78rem; color: #666; }
+  .meter-bar {
+    height: 10px; background: #eee; border-radius: 5px;
+    margin: 6px 0 4px; overflow: hidden;
+  }
+  .meter-fill { height: 100%; border-radius: 5px; transition: width 0.4s; }
+
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; flex: 2; }
+  .badge {
+    display: inline-block; padding: 4px 10px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.01em;
+  }
+  .badge-exempt    { background: #e6f4ea; color: #1e7e34; }
+  .badge-nonexempt { background: #fde8e8; color: #b71c1c; }
+  .badge-cat       { background: #e3f0ff; color: #1565c0; }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .filter-btns { display: flex; gap: 6px; }
+  .filter-btn {
+    padding: 6px 14px; border: 1.5px solid #c0c8d4; border-radius: 20px;
+    background: white; font-size: 0.82rem; cursor: pointer; font-weight: 500;
+    transition: all 0.12s;
+  }
+  .filter-btn.active { background: #1a2744; color: white; border-color: #1a2744; }
+  .filter-btn:hover:not(.active) { border-color: #0096D7; color: #0096D7; }
+  .spacer { flex: 1; }
+  #download-btn {
+    padding: 6px 14px; background: #0096D7; color: white; border: none;
+    border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  }
+  #download-btn:hover { background: #007ab8; }
+
+  /* ── Task table ── */
+  .task-table-wrap {
+    background: white; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead th {
+    background: #f5f7fa; text-align: left; padding: 10px 14px;
+    font-size: 0.78rem; font-weight: 700; color: #555;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border-bottom: 1px solid #e4e8ef;
+    position: sticky; top: 0;
+  }
+  tbody tr { border-bottom: 1px solid #f2f4f7; transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafbfd; }
+  td { padding: 10px 14px; vertical-align: top; }
+  td.task-text { max-width: 380px; line-height: 1.45; }
+  td.explain {
+    max-width: 260px; line-height: 1.4; color: #555; font-size: 0.83rem;
+    cursor: pointer;
+  }
+  td.explain .trunc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  td.explain.expanded .trunc { display: block; }
+  td.det-cell { white-space: nowrap; }
+
+  .no-tasks { padding: 32px; text-align: center; color: #999; font-size: 0.95rem; }
+  .loading { text-align: center; padding: 60px; color: #999; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FLSA Duties Test: Occupation Explorer</h1>
+  <p>Browse 18,785 O*NET tasks across 923 occupations, each classified Exempt or Non-exempt
+     under the FLSA white-collar overtime exemptions.</p>
+</header>
+
+<div class="container">
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="Search by job title — e.g. &ldquo;loan officer&rdquo;, &ldquo;registered nurse&rdquo;, &ldquo;marketing manager&rdquo;" autocomplete="off">
+    <div id="dropdown"></div>
+  </div>
+  <p class="hint">Exemption status reflects the O*NET duties profile, not any individual employer's job description.</p>
+
+  <div id="loading" class="loading">Loading data…</div>
+  <div id="result">
+    <div class="occ-header">
+      <div class="occ-title">
+        <h2 id="occ-name"></h2>
+        <div class="code" id="occ-code"></div>
+        <div class="major" id="occ-major"></div>
+      </div>
+      <div class="meter-wrap">
+        <div class="pct" id="pct-val" style="color:#00B050"></div>
+        <div class="meter-bar"><div class="meter-fill" id="meter-fill"></div></div>
+        <div class="pct-label">of tasks classified Exempt</div>
+      </div>
+      <div class="badges" id="badges"></div>
+    </div>
+
+    <div class="controls">
+      <div class="filter-btns">
+        <button class="filter-btn active" data-filter="all">All tasks</button>
+        <button class="filter-btn" data-filter="E">Exempt only</button>
+        <button class="filter-btn" data-filter="N">Non-exempt only</button>
+      </div>
+      <div class="spacer"></div>
+      <button id="download-btn">↓ Download CSV</button>
+    </div>
+
+    <div class="task-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Task description</th>
+            <th>Status</th>
+            <th>Exemption category</th>
+            <th>Reasoning</th>
+          </tr>
+        </thead>
+        <tbody id="task-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+let allTasks = [];
+let occIndex = [];
+let fuse = null;
+let currentOcc = null;
+let currentFilter = "all";
+
+const SOC_MAJOR_NAMES = {
+  "11":"Management","13":"Business & Financial Operations",
+  "15":"Computer & Mathematical","17":"Architecture & Engineering",
+  "19":"Life, Physical & Social Science","21":"Community & Social Service",
+  "23":"Legal","25":"Education & Library","27":"Arts, Design & Media",
+  "29":"Healthcare Practitioners","31":"Healthcare Support",
+  "33":"Protective Service","35":"Food Preparation & Serving",
+  "37":"Building & Grounds Maintenance","39":"Personal Care & Service",
+  "41":"Sales & Related","43":"Office & Administrative Support",
+  "45":"Farming, Fishing & Forestry","47":"Construction & Extraction",
+  "49":"Installation, Maintenance & Repair","51":"Production",
+  "53":"Transportation & Material Moving","55":"Military Specific"
+};
+
+async function init() {
+  try {
+    const [occsRes, tasksRes] = await Promise.all([
+      fetch("data/occupations.json"),
+      fetch("data/all_tasks.json"),
+    ]);
+    occIndex  = await occsRes.json();
+    allTasks  = await tasksRes.json();
+
+    fuse = new Fuse(occIndex, {
+      keys: ["name"],
+      threshold: 0.35,
+      includeScore: true,
+      minMatchCharLength: 2,
+    });
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("search").disabled = false;
+  } catch(e) {
+    document.getElementById("loading").textContent =
+      "Error loading data. Serve this folder with a local HTTP server: python3 -m http.server 8000";
+  }
+}
+
+// ── Search ──────────────────────────────────────────────────────────────────
+const searchEl   = document.getElementById("search");
+const dropdownEl = document.getElementById("dropdown");
+
+searchEl.disabled = true;
+
+searchEl.addEventListener("input", () => {
+  const q = searchEl.value.trim();
+  if (!q || q.length < 2) { dropdownEl.style.display = "none"; return; }
+  const results = fuse.search(q).slice(0, 12);
+  if (!results.length) { dropdownEl.style.display = "none"; return; }
+  dropdownEl.innerHTML = results.map((r, i) => {
+    const o = r.item;
+    const major = SOC_MAJOR_NAMES[o.major] || o.major;
+    return `<div class="dd-item" data-code="${o.code}" tabindex="0">
+      <div class="dd-name">${o.name}</div>
+      <div class="dd-meta">${o.code} &bull; ${major} &bull; ${o.n_tasks} tasks &bull; ${Math.round(o.share_exempt*100)}% exempt</div>
+    </div>`;
+  }).join("");
+  dropdownEl.style.display = "block";
+  dropdownEl.querySelectorAll(".dd-item").forEach(el => {
+    el.addEventListener("click", () => selectOcc(el.dataset.code));
+  });
+});
+
+document.addEventListener("click", e => {
+  if (!e.target.closest(".search-wrap")) dropdownEl.style.display = "none";
+});
+
+// ── Occupation display ───────────────────────────────────────────────────────
+function selectOcc(code) {
+  dropdownEl.style.display = "none";
+  const occ = occIndex.find(o => o.code === code);
+  if (!occ) return;
+  currentOcc = code;
+  currentFilter = "all";
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b.dataset.filter === "all"));
+
+  searchEl.value = occ.name;
+
+  document.getElementById("occ-name").textContent  = occ.name;
+  document.getElementById("occ-code").textContent   = occ.code;
+  document.getElementById("occ-major").textContent  =
+    SOC_MAJOR_NAMES[occ.major] ? `${SOC_MAJOR_NAMES[occ.major]} occupations` : "";
+
+  const pct = Math.round(occ.share_exempt * 100);
+  const color = pct >= 60 ? "#00B050" : pct >= 30 ? "#E46D0A" : "#C00000";
+  document.getElementById("pct-val").textContent = pct + "%";
+  document.getElementById("pct-val").style.color = color;
+  document.getElementById("meter-fill").style.width = pct + "%";
+  document.getElementById("meter-fill").style.background = color;
+
+  // Exemption category badges
+  const tasks = allTasks.filter(t => t.code === code);
+  const cats = [...new Set(tasks.filter(t => t.det === "E" && t.exemption).map(t => t.exemption))];
+  const badgesEl = document.getElementById("badges");
+  badgesEl.innerHTML =
+    `<span class="badge badge-exempt">${occ.n_exempt} Exempt</span>` +
+    `<span class="badge badge-nonexempt">${occ.n_tasks - occ.n_exempt} Non-exempt</span>` +
+    cats.map(c => `<span class="badge badge-cat">${c}</span>`).join("");
+
+  renderTasks(tasks);
+  document.getElementById("result").style.display = "block";
+}
+
+function renderTasks(tasks) {
+  const filtered = currentFilter === "all" ? tasks : tasks.filter(t => t.det === currentFilter);
+  const tbody = document.getElementById("task-body");
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="no-tasks">No tasks match the current filter.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(t => {
+    const badge = t.det === "E"
+      ? `<span class="badge badge-exempt">Exempt</span>`
+      : `<span class="badge badge-nonexempt">Non-exempt</span>`;
+    const cat  = t.exemption ? `<span class="badge badge-cat">${t.exemption}</span>` : `<span style="color:#bbb">—</span>`;
+    const expl = t.explanation || `<span style="color:#bbb">—</span>`;
+    return `<tr>
+      <td class="task-text">${escHtml(t.task)}</td>
+      <td class="det-cell">${badge}</td>
+      <td>${cat}</td>
+      <td class="explain" onclick="this.classList.toggle('expanded')">
+        <div class="trunc">${escHtml(t.explanation)}</div>
+      </td>
+    </tr>`;
+  }).join("");
+}
+
+function escHtml(s) {
+  return (s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// ── Filters ──────────────────────────────────────────────────────────────────
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    if (currentOcc) {
+      renderTasks(allTasks.filter(t => t.code === currentOcc));
+    }
+  });
+});
+
+// ── Download ──────────────────────────────────────────────────────────────────
+document.getElementById("download-btn").addEventListener("click", () => {
+  if (!currentOcc) return;
+  const tasks = allTasks.filter(t => t.code === currentOcc);
+  const rows = [["Task","Determination","Exemption Category","Reasoning"]];
+  tasks.forEach(t => rows.push([
+    `"${(t.task||"").replace(/"/g,'""')}"`,
+    t.det === "E" ? "Exempt" : "Non-exempt",
+    `"${(t.exemption||"").replace(/"/g,'""')}"`,
+    `"${(t.explanation||"").replace(/"/g,'""')}"`,
+  ]));
+  const csv = rows.map(r => r.join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `flsa_tasks_${currentOcc.replace(/[^a-z0-9]/gi,"_")}.csv`;
+  a.click();
+});
+
+init();
+</script>
+</body>
+</html>
